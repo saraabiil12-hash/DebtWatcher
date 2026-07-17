@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DebtWatcher</title>
+<style>
+:root {
+--bg-color: #f4f6f9;
+--container-bg: #ffffff;
+--text-color: #333333;
+--accent-color: #007bff;
+--border-color: #cccccc;
+--main-font: 15px;
+--name-font: 18px;
+--price-font: 20px;
+}
+
+.dark-theme {
+--bg-color: #121212;
+--container-bg: #1e1e1e;
+--text-color: #e0e0e0;
+--accent-color: #00adb5;
+--border-color: #333;
+}
+
+.light-theme {
+--bg-color: #f4f6f9;
+--container-bg: #ffffff;
+--text-color: #333333;
+--accent-color: #007bff;
+--border-color: #cccccc;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+body { background-color: var(--bg-color); color: var(--text-color); font-size: var(--main-font); padding: 15px; transition: background 0.3s, color 0.3s; overflow-x: hidden; }
+
+/* Main Container */
+.container { 
+  max-width: 1200px; 
+  margin: 0 auto; 
+  background: var(--container-bg); 
+  padding: 20px; 
+  border-radius: 8px; 
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05); 
+  border: 1px solid var(--border-color); 
+}
+
+h2 { text-align: center; margin-bottom: 5px; color: var(--accent-color); font-size: 26px; font-weight: bold; }
+
+/* Merchant Title */
+.merchant-title-style { 
+  text-align: center; 
+  font-weight: bold; 
+  font-size: 22px; 
+  margin-top: 5px;
+  margin-bottom: 15px; 
+  padding: 8px;
+  background: rgba(0, 123, 255, 0.05);
+  border-radius: 6px;
+  color: var(--text-color); 
+  display: none; 
+  letter-spacing: 0.5px;
+}
+.dark-theme .merchant-title-style { background: rgba(0, 173, 181, 0.1); }
+
+/* Customer Mode Banner */
+.customer-mode-banner {
+  background: #0056b3;
+  color: #fff;
+  text-align: center;
+  padding: 12px;
+  font-weight: bold;
+  font-size: 14px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  border: none;
+  width: 100%;
+  display: block;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: background 0.2s;
+}
+.customer-mode-banner:hover { background: #004085; }
+
+/* Two-Column Layout Grid */
+.app-content-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+.input-group { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 12px; 
+  background: rgba(0,0,0,0.02); 
+  padding: 15px; 
+  border-radius: 6px; 
+  border: 1px solid var(--border-color); 
+  height: fit-content; 
+}
+.dark-theme .input-group { background: rgba(0,0,0,0.1); }
+
+.input-group h3 {
+  font-size: 15px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 5px;
+  color: var(--accent-color);
+  font-weight: bold;
+}
+
+input { width: 100%; padding: 12px; border-radius: 5px; border: 1px solid var(--border-color); background: #fff; color: #333; font-size: 15px; }
+.dark-theme input { background: #2a2a2a; color: #fff; }
+
+.btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+button { padding: 12px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 14px; background: var(--accent-color); color: #fff; transition: 0.2s; }
+button:hover { opacity: 0.9; }
+.btn-danger { background: #dc3545; }
+.btn-success { background: #28a745; }
+.btn-secondary { background: #6c757d; }
+
+.search-box { position: relative; margin-bottom: 15px; }
+
+/* Customer Rows Style */
+.customer-row { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  padding: 12px; 
+  background: rgba(0,0,0,0.01); 
+  border-bottom: 1px solid var(--border-color); 
+  cursor: pointer; 
+  transition: 0.2s; 
+  border-radius: 4px; 
+  margin-bottom: 5px; 
+}
+.dark-theme .customer-row { background: rgba(255,255,255,0.03); }
+.customer-row:hover { background: rgba(0,0,0,0.04); }
+.dark-theme .customer-row:hover { background: rgba(255,255,255,0.07); }
+
+.customer-info-left { display: flex; flex-direction: column; gap: 4px; text-align: left; }
+.customer-name-text { font-size: var(--name-font); font-weight: bold; }
+.customer-phone-text { font-size: 13px; color: #666; }
+.dark-theme .customer-phone-text { color: #888; }
+.customer-balance-right { font-size: var(--price-font); font-weight: bold; color: #dc3545; text-align: right; }
+
+.total-box { font-size: 22px; font-weight: bold; text-align: center; margin-top: 15px; padding: 12px; background: #cccccc; border-radius: 5px; border: 1px solid var(--border-color); color: var(--accent-color); }
+.light-theme .total-box { background: #d6d8db; color: #0056b3; }
+
+/* Standard Overlay Card */
+.overlay-card { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: flex; justify-content: center; align-items: center; z-index: 9999; padding: 15px; }
+.card-content { background: var(--container-bg); padding: 25px; border-radius: 10px; width: 100%; max-width: 400px; text-align: center; border: 1px solid var(--border-color); }
+
+/* Slide-out Drawer */
+.drawer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: none;
+  z-index: 9998;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.drawer-overlay.active { display: block; opacity: 1; }
+
+.side-drawer {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 100%;
+  max-width: 440px;
+  height: 100%;
+  background: var(--container-bg);
+  box-shadow: -5px 0 25px rgba(0,0,0,0.15);
+  transition: right 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  padding: 25px;
+  border-left: 1px solid var(--border-color);
+  overflow-y: auto;
+}
+.side-drawer.open { right: 0; }
+
+.modal-history-area { flex-grow: 1; margin-top: 15px; min-height: 200px; max-height: 350px; overflow-y: auto; background: rgba(0,0,0,0.03); border-radius: 6px; padding: 12px; border: 1px solid var(--border-color); }
+
+/* Bottom Controls */
+.theme-font-section { display: flex; justify-content: space-between; margin-top: 20px; padding-top: 15px; border-top: 1px solid var(--border-color); gap: 15px; }
+.sub-btn-group { display: flex; flex-direction: column; gap: 5px; width: 48%; }
+.sub-btn-group span { font-size: 12px; font-weight: bold; margin-bottom: 2px; color: #666; }
+.dark-theme .sub-btn-group span { color: #888; }
+.mini-btn-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; }
+.mini-btn-grid-three { grid-template-columns: repeat(3, 1fr); }
+.theme-btn, .font-btn { padding: 8px; font-size: 12px; background: #e0e0e0; color: #333; border: 1px solid var(--border-color); font-weight: bold; }
+.dark-theme .theme-btn, .dark-theme .font-btn { background: #333; color: #ccc; }
+.theme-btn.active, .font-btn.active { background: var(--accent-color); color: #fff; border-color: var(--accent-color); }
+
+@media (min-width: 768px) {
+  .app-content-grid {
+    grid-template-columns: 1fr 1.5fr;
+    align-items: start;
+  }
+}
+</style>
+</head>
+<body class="light-theme">
+
+<!-- LOCK BOX -->
+<div id="lockBox" class="overlay-card" style="display: none;">
+<div class="card-content">
+<h2 style="color:#ff4d4d;">App-ka waa Laxiray!</h2>
+<p style="margin-bottom: 15px; font-size: 14px; color: #666;">Fadlan bixi lacagta rukunka bishaan si aad u sii isticmaasho App-ka.</p>
+<input type="password" id="subscription-key" placeholder="Geli furaha rukunka...">
+<button onclick="handleLockSubmit()" class="btn-success" style="width: 100%; margin-top: 10px; padding: 12px;">Foor App-ka</button>
+<p id="error-msg" style="color: red; display: none; margin-top: 10px; font-size: 13px;">❌ Furaha rukunka waa khalad!</p>
+</div>
+</div>
+
+<!-- DYNAMIC LOGIN OVERLAY -->
+<div id="dynamicLoginOverlay" class="overlay-card" style="display: none;">
+<div class="card-content" style="padding: 20px;">
+<div style="background: rgba(0, 123, 255, 0.1); border: 1px solid rgba(0, 123, 255, 0.2); padding: 12px; border-radius: 6px; margin-bottom: 20px;">
+  <p style="font-size: 15px; color: #007bff; font-weight: bold;">Geli baasawarka dukaanka</p>
+</div>
+
+<input type="password" id="dynamicPasswordInput" placeholder="Password..." style="margin-bottom: 5px;">
+<p id="dynamicLoginError" style="display:none; margin-top:10px; font-size:13px; font-weight:bold;"></p>
+
+<button onclick="checkDynamicPassword()" style="background: #007bff; color: #fff; font-size: 18px; font-weight: bold; width: 100%; margin-top: 15px; padding: 12px; border-radius: 6px; border: none; box-shadow: 0 2px 4px rgba(0,123,255,0.2); cursor: pointer;">
+  Login
+</button>
+
+<button onclick="openCustomerPortal()" class="btn-secondary" style="width:100%; margin-top:12px; padding:10px; font-size:14px; border-radius: 6px;">Portal-ka Macmiilka</button>
+</div>
+</div>
+
+<!-- CUSTOMER PORTAL -->
+<div id="customerPortal" class="overlay-card" style="display:none;">
+<div class="card-content">
+<h2>Portal-ka Macmiilka</h2>
+<p style="margin-bottom:12px; font-size:13px; color:#666;">Geli PIN-kaaga si aad u aragto haraagaaga.</p>
+<input type="password" id="custPinInput" placeholder="Geli PIN-kaaga..." oninput="checkCustomerPin()">
+<div id="custResultArea" style="margin-top:15px; padding:10px; background:rgba(0,0,0,0.05); border-radius:5px; display:none;"></div>
+<button onclick="exitCustomerPortal()" class="btn-danger" style="width:100%; margin-top:15px;">Ka Bax</button>
+</div>
+</div>
+
+<!-- PAYMENT MODAL -->
+<div id="paymentModal" class="overlay-card" style="display: none;">
+<div class="card-content">
+<h2 style="color: orange;">⚠️ Ogeysiis Lacag Bixin</h2>
+<p style="margin-bottom: 20px; font-size: 14px; line-height: 1.5;">Rukunka app-kaaga wuxuu dhacayaa dhowaan. Fadlan bixi lacagta ka hor 1-da bisha si aysan shaqadu kaaga istaagin.</p>
+<button onclick="document.getElementById('paymentModal').style.display='none'" class="btn-success" style="width: 100%; padding: 10px;">Waan Fahmay</button>
+</div>
+</div>
+
+<!-- DRAWER OVERLAY & SIDE DRAWER -->
+<div id="drawerOverlay" class="drawer-overlay" onclick="closeDetailsModal()"></div>
+<div id="detailsDrawer" class="side-drawer">
+  <h2 id="modalClientName" style="margin-bottom:5px; text-align: left;">👤 Macmiil</h2>
+  <div style="font-size:13px; color:#666; margin-bottom:20px; text-align: left; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">
+    Tel: <span id="modalClientPhone">—</span> | PIN: <span id="modalClientPin">1234</span>
+  </div>
+
+  <div style="font-size:14px; margin-bottom:5px; color:#666; text-align: left;">Haraaga Hadda:</div>
+  <div id="modalClientBalance" style="font-size:36px; font-weight:bold; color:#dc3545; margin-bottom:25px; text-align: left;">$0.00</div>
+
+  <div class="btn-grid">
+    <button id="modalPlusBtn" class="btn-success" style="padding: 14px;">+ Deyn</button>
+    <button id="modalMinusBtn" class="btn-danger" style="padding: 14px;">- Bixin</button>
+  </div>
+
+  <div id="modalHistoryList" class="modal-history-area"></div>
+
+  <div style="display:grid; grid-template-columns: 2fr 1fr; gap:10px; margin-top:20px;">
+    <button onclick="closeDetailsModal()" class="btn-secondary">Dib u Noqo</button>
+    <button id="modalDeleteBtn" class="btn-danger" style="padding:4px; font-size:12px;">Tirtir</button>
+  </div>
+</div>
+
+<!-- MAIN CONTAINER -->
+<div id="mainApp" class="container" style="display: none;">
+  <h2>DebtWatcher</h2>
+  
+  <div id="merchantTitle" class="merchant-title-style">Dukaanka Hanti</div>
+
+  <button class="customer-mode-banner" onclick="openCustomerPortal()">
+    🔒 ALBAABKA MACMIILKA (CUSTOMER MODE)
+  </button>
+
+  <div class="app-content-grid">
+    <div class="input-group">
+      <h3>Diiwaangeli Macmiil</h3>
+      <input type="text" id="cName" placeholder="Magaca Macmiilka">
+      <input type="number" id="cPhone" placeholder="Telefanka Macmiilka">
+      <input type="number" id="cPin" placeholder="PIN-ka Macmiilka (Haddii kale: 1234)">
+      <button onclick="addC()" class="btn-success">Add Customer</button>
+    </div>
+
+    <div class="list-section">
+      <div class="search-box">
+        <input type="text" id="sBar" placeholder="Raadi macmiil..." oninput="render()">
+      </div>
+
+      <div id="area" style="max-height: 450px; overflow-y: auto; margin-bottom: 10px;"></div>
+
+      <div id="tGuud" class="total-box">Total: $0.00</div>
+
+      <button onclick="downloadCSV()" class="btn-secondary" style="width:100%; margin-top:15px; padding:10px; font-size:13px;">Download Backup (CSV)</button>
+    </div>
+  </div>
+
+  <div class="theme-font-section">
+    <div class="sub-btn-group">
+      <span>Theme:</span>
+      <div class="mini-btn-grid">
+        <button class="theme-btn active" id="btnThemeLight" onclick="changeTheme('light', event)">Light</button>
+        <button class="theme-btn" id="btnThemeDark" onclick="changeTheme('dark', event)">Dark</button>
+      </div>
+    </div>
+    <div class="sub-btn-group">
+      <span>Font Size:</span>
+      <div class="mini-btn-grid mini-btn-grid-three">
+        <button class="font-btn" onclick="changeFont('small', event)">S</button>
+        <button class="font-btn active" onclick="changeFont('medium', event)">M</button>
+        <button class="font-btn" onclick="changeFont('large', event)">L</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const googleScriptUrl = "https://script.google.com/macros/s/AKfycbwkT-KS6MMAYHdJtPEu3he6Gw3aWoFd-MHxHoQ507ovzplC7UwrXV8fWkde8id2cbkX/exec";
+let dynamicSheetURL = localStorage.getItem("user_sheet_url") || "";
+let clients = [];
+let activeClientIndex = null;
+
+const furayaashaSanadka = { 1: "9352", 2: "4810", 3: "7264", 4: "1598", 5: "3641", 6: "8523", 7: "2047", 8: "6139", 9: "5082", 10: "7415", 11: "3968", 12: "8251" };
+
+window.onload = function() {
+  let isPaid = localStorage.getItem("is_subscription_paid") === "true";
+  let bishaHadda = new Date().getMonth() + 1;
+  let lastPaidMonth = parseInt(localStorage.getItem("last_paid_month")) || 0;
+
+  if (bishaHadda !== lastPaidMonth) {
+    localStorage.setItem("is_subscription_paid", "false");
+    isPaid = false;
+  }
+
+  let maalintaHadda = new Date().getDate();
+
+  if (!isPaid && maalintaHadda >= 1) {
+    document.getElementById("lockBox").style.display = "flex";
+    document.getElementById("dynamicLoginOverlay").style.display = "none";
+    document.getElementById("customerPortal").style.display = "none";
+    toggleMainAppVisibility(false);
+    return;
+  }
+
+  document.getElementById("dynamicPasswordInput").value = "";
+  document.getElementById("dynamicLoginOverlay").style.display = "flex";
+  document.getElementById("customerPortal").style.display = "none";
+  toggleMainAppVisibility(false);
+
+  if (!isPaid && maalintaHadda >= 28) {
+    let ogeysiisModal = document.getElementById("paymentModal");
+    if(ogeysiisModal) ogeysiisModal.style.display = "block";
+  }
+};
+
+function checkDynamicPassword() {
+  let userInput = document.getElementById("dynamicPasswordInput").value.trim();
+  let errorText = document.getElementById("dynamicLoginError");
+  if (userInput === "") { alert("Fadlan qor password-ka dukaanka!"); return; }
+
+  if (userInput !== "Hanti@2026") {
+    errorText.style.color = "#f85149";
+    errorText.innerText = "❌ Password-ka aad gelisay waa khaldan yahay!";
+    errorText.style.display = "block";
+    document.getElementById("dynamicPasswordInput").value = "";
+    toggleMainAppVisibility(false); 
+    return; 
+  }
+
+  errorText.style.display = "none";
+  localStorage.setItem("dukaan_password", userInput);
+  
+  let storeKey = "DATA_" + userInput;
+  clients = JSON.parse(localStorage.getItem(storeKey)) || [];
+
+  let savedName = localStorage.getItem("saved_business_name") || "Dukaanka Hanti";
+  let mTitle = document.getElementById("merchantTitle");
+  if (mTitle) {
+    mTitle.innerText = savedName;
+    mTitle.style.display = "block";
+  }
+
+  document.getElementById("dynamicLoginOverlay").style.display = "none";
+  document.getElementById("customerPortal").style.display = "none";
+  toggleMainAppVisibility(true);
+  render();
+
+  fetch(`${googleScriptUrl}?action=getMerchantSheet&password=${userInput}`)
+  .then(response => response.json())
+  .then(data => {
+    if (data.status === "Success") {
+      localStorage.setItem("user_sheet_url", data.sheetURL);
+      dynamicSheetURL = data.sheetURL;
+
+      if (data.businessName && data.businessName.trim() !== "" && data.businessName.trim().toLowerCase() !== "undefined") {
+        let bName = data.businessName.trim();
+        mTitle.innerText = bName;
+        localStorage.setItem("saved_business_name", bName);
+      }
+      syncToGoogleSheets(); 
+    }
+  }).catch(err => {
+    console.log("Offline mode sync active.");
+  });
+}
+
+function handleLockSubmit() {
+  let inputKey = document.getElementById("subscription-key").value.trim();
+  let errorMsg = document.getElementById("error-msg");
+  let bishaHadda = new Date().getMonth() + 1;
+
+  if (inputKey === furayaashaSanadka[bishaHadda] || inputKey === "7700") {
+    localStorage.setItem("is_subscription_paid", "true");
+    localStorage.setItem("last_paid_month", bishaHadda);
+    document.getElementById("lockBox").style.display = "none";
+    document.getElementById("dynamicLoginOverlay").style.display = "flex";
+    toggleMainAppVisibility(false);
+    alert("Furaha rukunka waa sax! App-kii waa lagaa furay.");
+  } else {
+    errorMsg.style.display = "block";
+  }
+}
+
+function toggleMainAppVisibility(show) {
+  let mainContainer = document.getElementById("mainApp");
+  if (mainContainer) {
+    mainContainer.style.setProperty("display", show ? "block" : "none", "important");
+    mainContainer.style.setProperty("opacity", show ? "1" : "0", "important");
+    mainContainer.style.setProperty("pointer-events", show ? "all" : "none", "important");
+  }
+}
+
+function changeTheme(theme, event) {
+  document.body.className = theme + '-theme';
+  document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
+  if (event && event.target) {
+    event.target.classList.add('active');
+  } else {
+    if(theme === 'light') document.getElementById('btnThemeLight').classList.add('active');
+    if(theme === 'dark') document.getElementById('btnThemeDark').classList.add('active');
+  }
+}
+
+function changeFont(size, event) {
+  const root = document.documentElement;
+  document.querySelectorAll('.font-btn').forEach(btn => btn.classList.remove('active'));
+  if (event && event.target) event.target.classList.add('active');
+  if (size === 'small') { root.style.setProperty('--main-font', '12px'); root.style.setProperty('--name-font', '14px'); root.style.setProperty('--price-font', '16px'); }
+  else if (size === 'medium') { root.style.setProperty('--main-font', '15px'); root.style.setProperty('--name-font', '18px'); root.style.setProperty('--price-font', '20px'); }
+  else if (size === 'large') { root.style.setProperty('--main-font', '18px'); root.style.setProperty('--name-font', '22px'); root.style.setProperty('--price-font', '24px'); }
+}
+
+function save() { 
+  let pass = localStorage.getItem("dukaan_password"); 
+  if(pass) { localStorage.setItem("DATA_" + pass, JSON.stringify(clients)); } 
+  render(); 
+  syncToGoogleSheets(); 
+}
+
+function render() {
+  let area = document.getElementById("area");
+  let searchVal = document.getElementById("sBar").value.toLowerCase().trim();
+  area.innerHTML = "";
+  let totalGuud = 0;
+
+  let filtered = clients.filter(c => c.name.toLowerCase().includes(searchVal) || c.phone.includes(searchVal));
+
+  filtered.forEach((c) => {
+    let actualIndex = clients.indexOf(c);
+    totalGuud += c.bal;
+
+    let row = document.createElement("div");
+    row.className = "customer-row";
+    row.onclick = () => { openDetailsModal(actualIndex); };
+
+    row.innerHTML = `<div class="customer-info-left"><span class="customer-name-text">${c.name}</span><span class="customer-phone-text">📞 ${c.phone}</span></div><div class="customer-balance-right">${c.bal.toFixed(2)}</div>`; 
+    area.appendChild(row); 
+  }); 
+  document.getElementById("tGuud").innerText = "Total: $" + totalGuud.toFixed(2);
+}
+
+function addC() {
+  let n = document.getElementById("cName").value.trim(); 
+  let p = document.getElementById("cPhone").value.trim(); 
+  let pin = document.getElementById("cPin").value.trim() || "1234";
+  if(!n || !p) { alert("Fadlan buuxi Magaca iyo Telefanka!"); return; }
+  clients.push({ name: n, phone: p, pin: pin, bal: 0, hist: [] });
+  document.getElementById("cName").value = ""; 
+  document.getElementById("cPhone").value = ""; 
+  document.getElementById("cPin").value = "";
+  alert("Macmiilka " + n + " waa la diiwaangeliyey!"); 
+  save();
+}
+
+function updateFromModal(type) {
+  let amt = prompt(type === 'p' ? "Geli deynta:" : "Geli lacag bixinta:");
+  if(!amt || isNaN(amt) || parseFloat(amt) <= 0) return;
+
+  amt = parseFloat(amt);
+  let c = clients[activeClientIndex];
+  let waqti = new Date().toLocaleString();
+
+  if(!c.hist) c.hist = [];
+
+  if(type === 'p') {
+    c.bal += amt;
+    c.hist.unshift(`DEBT_MARKER|Plus|${amt.toFixed(2)}|Ku daris deyn|${waqti}`);
+  } else {
+    c.bal -= amt;
+    c.hist.unshift(`PAID_MARKER|Paid|${amt.toFixed(2)}|Lacag bixin|${waqti}`);
+  }
+  save();
+  openDetailsModal(activeClientIndex);
+}
+
+function tirFromModal() { 
+  if(confirm("Ma hubtaa tirtirista?")) { clients.splice(activeClientIndex, 1); save(); closeDetailsModal(); } 
+}
+
+function syncToGoogleSheets() { 
+  if(!googleScriptUrl || !dynamicSheetURL) return; 
+  let pass = localStorage.getItem("dukaan_password"); 
+  fetch(googleScriptUrl, { method: "POST", mode: "no-cors", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: new URLSearchParams({ action: "syncData", password: pass, sheetURL: dynamicSheetURL, jsonData: JSON.stringify(clients) })}); 
+}
+
+function downloadCSV() { 
+  let csvContent = "data:text/csv;charset=utf-8,Magaca,Telefanka,PIN,Haraaga\n"; 
+  clients.forEach(c => { csvContent += `"${c.name}","${c.phone}","${c.pin}","${c.bal.toFixed(2)}"\n`; }); 
+  let encodedUri = encodeURI(csvContent); 
+  let link = document.createElement("a"); 
+  link.setAttribute("href", encodedUri); 
+  link.setAttribute("download", "Backup.csv"); 
+  document.body.appendChild(link); 
+  link.click(); 
+  document.body.removeChild(link); 
+}
+
+function openCustomerPortal() { 
+  document.getElementById("dynamicLoginOverlay").style.display = "none";
+  toggleMainAppVisibility(false); 
+  document.getElementById("customerPortal").style.display = "flex"; 
+  document.getElementById("custPinInput").value = ""; 
+  document.getElementById("custResultArea").style.display = "none"; 
+}
+
+function exitCustomerPortal() { 
+  document.getElementById("customerPortal").style.display = "none"; 
+  toggleMainAppVisibility(false); 
+  document.getElementById("dynamicPasswordInput").value = ""; 
+  document.getElementById("dynamicLoginOverlay").style.display = "flex"; 
+  let mTitle = document.getElementById("merchantTitle");
+  if(mTitle) mTitle.style.display = "none"; 
+}
+
+function checkCustomerPin() {
+  let enteredPin = document.getElementById("custPinInput").value.trim();
+  let resultArea = document.getElementById("custResultArea");
+  if (enteredPin === "") return;
+  let foundClient = clients.find(c => c.pin === enteredPin);
+  resultArea.style.display = "block";
+  if (foundClient) {
+    resultArea.innerHTML = `<h3 style="color:#28a745;">${foundClient.name}</h3><div style="font-size:26px;color:#ff4d4d;">$${foundClient.bal.toFixed(2)}</div>`;
+  } else {
+    resultArea.innerHTML = `<p style="color:red;">PIN-ka waa khalad!</p>`;
+  }
+}
+
+function openDetailsModal(i) {
+  activeClientIndex = i;
+  let c = clients[i];
+
+  document.getElementById("modalClientName").innerText = "👤 " + c.name;
+  document.getElementById("modalClientPhone").innerText = c.phone || '—';
+  document.getElementById("modalClientPin").innerText = c.pin || '1234';
+  document.getElementById("modalClientBalance").innerText = "$" + c.bal.toFixed(2);
+
+  document.getElementById("modalPlusBtn").onclick = function() { updateFromModal('p'); };
+  document.getElementById("modalMinusBtn").onclick = function() { updateFromModal('m'); };
+  document.getElementById("modalDeleteBtn").onclick = function() { tirFromModal(); };
+
+  let histList = document.getElementById("modalHistoryList");
+  if (histList) {
+    histList.innerHTML = "<h4 style='margin-bottom:8px; border-bottom:1px solid #ddd; padding-bottom:4px; text-align:left;'>Taariikhda dhow:</h4>";
+    if (!c.hist || c.hist.length === 0) {
+      histList.innerHTML += "<p style='color:#888; font-size:13px; text-align:center;'>Ma jirto taariikh dhow.</p>";
+    } else {
+      c.hist.forEach(h => {
+        let parts = h.split('|');
+        if (parts.length >= 5) {
+          let isPlus = parts[1] === 'Plus';
+          let color = isPlus ? '#28a745' : '#dc3545';
+          let sign = isPlus ? '+' : '-';
+          histList.innerHTML += `<div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid #eee; font-size:13px;"><span style="text-align:left;">${parts[4]} <br><small style="color:#777;">${parts[3]}</small></span><b style="color:${color};">${sign}${parts[2]}</b></div>`;
+        }
+      });
+    }
+  }
+
+  document.getElementById("drawerOverlay").classList.add("active");
+  document.getElementById("detailsDrawer").classList.add("open");
+}
+
+function closeDetailsModal() {
+  document.getElementById("drawerOverlay").classList.remove("active");
+  document.getElementById("detailsDrawer").classList.remove("open");
+  activeClientIndex = null;
+}
+</script>
+</body>
+</html>
