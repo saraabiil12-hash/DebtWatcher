@@ -1,0 +1,21 @@
+name: Build Android App Bundle (AAB)
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: PWABuilder Android Action
+        uses: pwa-builder/pwabuilder-action@v1.0.0
+        with:
+          manifest-file: 'manifest.json'
+          output-type: 'aab'
