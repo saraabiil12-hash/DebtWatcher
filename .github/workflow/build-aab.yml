@@ -1,0 +1,31 @@
+name: Build Android App Bundle (AAB)
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install PWABuilder CLI & Build AAB
+        run: |
+          npm install -g @pwabuilder/cli
+          pwa-builder package --manifest manifest.json --platform android --output ./build-output
+
+      - name: Upload AAB Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-aab-package
+          path: ./build-output
