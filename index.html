@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="manifest" href="manifest.json">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DebtWatcher</title>
+<style>
+:root {
+--bg-color: #f4f6f9;
+--container-bg: #ffffff;
+--text-color: #333333;
+--accent-color: #007bff;
+--border-color: #cccccc;
+--main-font: 15px;
+--name-font: 18px;
+--price-font: 20px;
+}
+
+.dark-theme {
+--bg-color: #121212;
+--container-bg: #1e1e1e;
+--text-color: #e0e0e0;
+--accent-color: #00adb5;
+--border-color: #333;
+}
+
+.light-theme {
+--bg-color: #f4f6f9;
+--container-bg: #ffffff;
+--text-color: #333333;
+--accent-color: #007bff;
+--border-color: #cccccc;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+body { background-color: var(--bg-color); color: var(--text-color); font-size: var(--main-font); padding: 10px; transition: background 0.3s, color 0.3s; overflow-x: hidden; }
+
+.container { 
+  max-width: 1200px; 
+  margin: 0 auto; 
+  background: var(--container-bg); 
+  padding: 15px; 
+  border-radius: 8px; 
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05); 
+  border: 1px solid var(--border-color); 
+  position: relative;
+}
+
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+.menu-dropdown { position: relative; display: inline-block; }
+.menu-btn { background: var(--accent-color); color: white; padding: 8px 14px; font-size: 16px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+
+.dropdown-content {
+  display: none; position: absolute; left: 0; top: 40px; background-color: var(--container-bg); min-width: 200px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1000; border-radius: 6px; border: 1px solid var(--border-color); overflow: hidden;
+}
+.dropdown-content a { color: var(--text-color); padding: 12px 16px; text-decoration: none; display: block; font-weight: bold; font-size: 14px; border-bottom: 1px solid var(--border-color); }
+.dropdown-content a:hover { background-color: rgba(0,123,255,0.1); }
+.show-dropdown { display: block; }
+
+.merchant-title-style { font-weight: bold; font-size: 20px; color: var(--accent-color); }
+.customer-mode-banner { background: #0056b3; color: #fff; text-align: center; padding: 10px; font-weight: bold; font-size: 13px; border-radius: 6px; margin-bottom: 15px; cursor: pointer; border: none; width: 100%; }
+
+.app-content-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
+.input-group { display: flex; flex-direction: column; gap: 10px; background: rgba(0,0,0,0.02); padding: 12px; border-radius: 6px; border: 1px solid var(--border-color); }
+
+input { width: 100%; padding: 10px; border-radius: 5px; border: 1px solid var(--border-color); background: #fff; color: #333; font-size: 14px; }
+.dark-theme input { background: #2a2a2a; color: #fff; }
+
+.btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+button { padding: 10px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 14px; background: var(--accent-color); color: #fff; }
+.btn-danger { background: #dc3545; }
+.btn-success { background: #28a745; }
+.btn-secondary { background: #6c757d; }
+.btn-warning { background: #ffc107; color: #000; }
+
+.customer-row { display: flex; justify-content: space-between; align-items: center; padding: 10px; background: rgba(0,0,0,0.01); border-bottom: 1px solid var(--border-color); cursor: pointer; border-radius: 4px; margin-bottom: 4px; }
+
+/* AMAANO CARDS */
+.amaano-card-btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(40,167,69,0.05);
+  border: 1px solid var(--border-color);
+  border-left: 5px solid #28a745;
+  padding: 12px 15px;
+  margin-bottom: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  width: 100%;
+}
+.amaano-card-btn:hover { background: rgba(40,167,69,0.12); }
+
+.amaano-checkbox-wrapper { display: flex; align-items: center; gap: 12px; }
+.custom-chk { width: 22px; height: 22px; cursor: pointer; }
+
+.amount-badge-amaano { background: #28a745; color: #fff; padding: 6px 12px; border-radius: 20px; font-weight: bold; font-size: 14px; }
+.customer-info-left { display: flex; flex-direction: column; text-align: left; }
+.customer-name-text { font-size: var(--name-font); font-weight: bold; }
+.customer-phone-text { font-size: 12px; color: #666; }
+.customer-balance-right { font-size: var(--price-font); font-weight: bold; color: #dc3545; }
+
+.total-box { font-size: 18px; font-weight: bold; text-align: center; margin-top: 10px; padding: 10px; background: #cccccc; border-radius: 5px; color: var(--accent-color); }
+.light-theme .total-box { background: #d6d8db; color: #0056b3; }
+
+.section-badge-header { display: flex; justify-content: space-between; align-items: center; background: rgba(0,123,255,0.08); padding: 10px; border-radius: 6px; margin-bottom: 10px; font-weight: bold; }
+
+.overlay-card { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: flex; justify-content: center; align-items: center; z-index: 9999; padding: 15px; }
+.card-content { background: var(--container-bg); padding: 20px; border-radius: 10px; width: 100%; max-width: 400px; text-align: center; border: 1px solid var(--border-color); }
+
+.drawer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); display: none; z-index: 9998; opacity: 0; transition: opacity 0.3s ease; }
+.drawer-overlay.active { display: block; opacity: 1; }
+
+.side-drawer { position: fixed; top: 0; right: -100%; width: 100%; max-width: 440px; height: 100%; background: var(--container-bg); box-shadow: -5px 0 25px rgba(0,0,0,0.15); transition: right 0.3s ease; z-index: 9999; display: flex; flex-direction: column; padding: 20px; overflow-y: auto; }
+.side-drawer.open { right: 0; }
+
+.invoice-box { border: 1px dashed var(--border-color); border-radius: 6px; padding: 10px; margin-bottom: 10px; text-align: left; }
+.invoice-box label { display: block; font-size: 11px; font-weight: bold; margin-bottom: 2px; }
+
+.theme-font-section { display: flex; justify-content: space-between; margin-top: 15px; padding-top: 10px; border-top: 1px solid var(--border-color); }
+.sub-btn-group { display: flex; flex-direction: column; gap: 4px; width: 48%; }
+.mini-btn-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; }
+.mini-btn-grid-three { grid-template-columns: repeat(3, 1fr); }
+.theme-btn, .font-btn { padding: 6px; font-size: 11px; background: #e0e0e0; color: #333; border: 1px solid var(--border-color); font-weight: bold; }
+.theme-btn.active, .font-btn.active { background: var(--accent-color); color: #fff; }
+
+.hidden-section { display: none !important; }
+
+@media (min-width: 768px) {
+  .app-content-grid { grid-template-columns: 1fr 1.5fr; }
+}
+</style>
+</head>
+<body class="light-theme">
+
+<!-- LOCK BOX -->
+<div id="lockBox" class="overlay-card" style="display: none;">
+<div class="card-content">
+<h2 style="color:#ff4d4d;">App-ka waa Laxiray!</h2>
+<p style="margin-bottom: 15px; font-size: 13px;">Fadlan bixi lacagta rukunka bishaan.</p>
+<input type="password" id="subscription-key" placeholder="Geli furaha..." autocomplete="off">
+<button onclick="handleLockSubmit()" class="btn-success" style="width: 100%; margin-top: 10px;">Foor App-ka</button>
+<p id="error-msg" style="color: red; display: none; margin-top: 10px; font-size: 12px;">❌ Furaha waa khalad!</p>
+</div>
+</div>
+
+<!-- LOGIN OVERLAY -->
+<div id="dynamicLoginOverlay" class="overlay-card" style="display: none;">
+<div class="card-content">
+<p style="font-size: 15px; color: #007bff; font-weight: bold; margin-bottom: 15px;">Geli baasawarka dukaanka</p>
+<input type="password" id="dynamicPasswordInput" placeholder="Password..." autocomplete="new-password">
+<p id="dynamicLoginError" style="display:none; margin-top:8px; font-size:12px; font-weight:bold;"></p>
+<button onclick="checkDynamicPassword()" style="width: 100%; margin-top: 12px;">Login</button>
+<button onclick="openCustomerPortal()" class="btn-secondary" style="width:100%; margin-top:8px;">Portal-ka Macmiilka</button>
+</div>
+</div>
+
+<!-- CUSTOMER PORTAL -->
+<div id="customerPortal" class="overlay-card" style="display:none;">
+<div class="card-content">
+<h2>Portal-ka Macmiilka</h2>
+<input type="password" id="custPinInput" placeholder="Geli PIN-ka..." oninput="checkCustomerPin()" autocomplete="off">
+<div id="custResultArea" style="margin-top:10px; padding:10px; display:none;"></div>
+<button onclick="exitCustomerPortal()" class="btn-danger" style="width:100%; margin-top:10px;">Ka Bax</button>
+</div>
+</div>
+
+<!-- DRAWER OVERLAY & SIDE DRAWER (DEYMAHA) -->
+<div id="drawerOverlay" class="drawer-overlay" onclick="closeDetailsModal()"></div>
+<div id="detailsDrawer" class="side-drawer">
+  <h2 id="modalClientName" style="text-align: left;">👤 Macmiil</h2>
+  <div style="font-size:12px; color:#666; margin-bottom:10px;">Tel: <span id="modalClientPhone">—</span> | PIN: <span id="modalClientPin">1234</span></div>
+  <div id="modalClientBalance" style="font-size:30px; font-weight:bold; color:#dc3545; margin-bottom:10px;">$0.00</div>
+
+  <!-- BOONADA ALAABTA (INVOICE) ONLY -->
+  <div class="invoice-box">
+    <h4 style="margin-bottom: 10px; color: var(--accent-color);">📦 Boonada Alaabta (Invoice)</h4>
+    <div id="modeInvoiceSection">
+      <label>ALAABTA:</label>
+      <input type="text" id="invDesc" placeholder="Faahfaahinta alaabta">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 6px;">
+        <div><label>TIRADA:</label><input type="number" id="invQty" value="1" oninput="calculateInvoiceTotal()"></div>
+        <div><label>QIIMAHA ($):</label><input type="number" id="invPrice" value="0.00" oninput="calculateInvoiceTotal()"></div>
+      </div>
+      <div style="display: flex; justify-content: space-between; font-weight: bold; margin-top: 8px;">
+        <span>TOTAL:</span><span>$<span id="invTotalBox">0.00</span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="btn-grid">
+    <button id="modalPlusBtn" class="btn-success">+ Deyn</button>
+    <button id="modalMinusBtn" class="btn-danger">- Bixin</button>
+  </div>
+
+  <h4 style="margin-top:10px; margin-bottom:5px; font-size:13px;">📋 Taariikhda Dhaqdhaqaaqa:</h4>
+  <div id="modalHistoryList" style="flex-grow:1; max-height:180px; overflow-y:auto; background:rgba(0,0,0,0.02); padding:8px; border-radius:5px; border:1px solid var(--border-color);"></div>
+
+  <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-top:10px;">
+    <button onclick="sendDebtSMS()" class="btn-warning" style="font-size:12px;">📱 Dir SMS</button>
+    <button id="modalDeleteBtn" class="btn-danger" style="font-size:12px;">Tirtir</button>
+  </div>
+  <button onclick="closeDetailsModal()" class="btn-secondary" style="margin-top:5px; width:100%;">Dib u Noqo</button>
+</div>
+
+<!-- MAIN CONTAINER -->
+<div id="mainApp" class="container" style="display: none;">
+  
+  <div class="app-header">
+    <div class="menu-dropdown">
+      <button onclick="toggleMenu()" class="menu-btn">☰ Menu</button>
+      <div id="myDropdown" class="dropdown-content">
+        <a href="#" onclick="switchView('debts')">📝 Diiwaanka Deymaha</a>
+        <a href="#" onclick="switchView('amaanada')">💵 Amaanada (MSM)</a>
+        <a href="#" onclick="switchView('macaamiisha')">👥 Qaybta Macaamiisha</a>
+      </div>
+    </div>
+    <div id="merchantTitle" class="merchant-title-style">DebtWatcher</div>
+  </div>
+
+  <button class="customer-mode-banner" onclick="openCustomerPortal()">🔒 CUSTOMER PORTAL</button>
+
+  <!-- SECTION 1: DIIWAANKA DEYMAHA -->
+  <div id="viewDebtsSection">
+    <div class="section-badge-header">
+      <span>📝 Diiwaanka Deymaha</span>
+      <span style="font-size:12px;">Macaamiisha: <b id="countDebts">0</b></span>
+    </div>
+    <div class="app-content-grid">
+      <div class="input-group">
+        <h4 style="color:var(--accent-color);">Diiwaangeli Macmiil Deyn</h4>
+        <input type="text" id="cName" placeholder="Magaca Macmiilka">
+        <input type="number" id="cPhone" placeholder="Telefanka">
+        <input type="number" id="cPin" placeholder="PIN (Default: 1234)">
+        <button onclick="addC()" class="btn-success">Kudari Macmiil Deyn</button>
+      </div>
+      <div>
+        <input type="text" id="sBar" placeholder="Raadi macmiil..." oninput="render()" style="margin-bottom:8px;">
+        <div id="area" style="max-height: 350px; overflow-y: auto;"></div>
+        <div id="tGuud" class="total-box">Total Deyn: $0.00</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: AMAANADA -->
+  <div id="viewAmaanadaSection" class="hidden-section">
+    
+    <!-- BOGGA 1-AAD: LIISKA AMAANADA -->
+    <div id="amaanoMainPage">
+      <div class="section-badge-header" style="background: rgba(40,167,69,0.1); color: #28a745; justify-content: center;">
+        <span>Macaamiisha: <b id="countAmaanada">0</b></span>
+      </div>
+
+      <div class="app-content-grid">
+        <div class="input-group" style="border-left: 4px solid #28a745;">
+          <h4 style="color:#28a745;">Diiwaangeli Amaano Cusub</h4>
+          <input type="text" id="amName" placeholder="Magaca Macmiilka Amaanada">
+          <input type="number" id="amPhone" placeholder="Telefanka">
+          <input type="number" id="amPin" placeholder="PIN (Default: 1234)">
+          <button onclick="addAmaanoClient()" class="btn-success" style="background:#28a745;">Kudari Amaano</button>
+        </div>
+
+        <div>
+          <p style="font-size:12px; color:#666; margin-bottom:8px;">Taabo faylka si aad lacag u geliso ama ugu tiriso:</p>
+          <div id="amaanadaList" style="max-height: 350px; overflow-y: auto;"></div>
+          <div id="tAmaanoGuud" class="total-box" style="color:#28a745;">Total Amaano: $0.00</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOGGA 2-AAD: GUDAHA FAYLKA AMAANADA & HISTORY-GA -->
+    <div id="amaanoDetailPage" class="hidden-section" style="background: rgba(0,0,0,0.02); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
+      <button onclick="closeAmaanoDetail()" class="btn-secondary" style="margin-bottom:12px; width: 100%;">⬅ Dib u Noqo Liiska Amaanada</button>
+      
+      <h3 id="amDetailName" style="color: var(--accent-color); margin-bottom: 5px;">👤 Macmiil</h3>
+      <p style="font-size: 13px; color: #666; margin-bottom: 10px;">📞 Tel: <span id="amDetailPhone">—</span></p>
+      
+      <div style="background: var(--container-bg); padding: 15px; border-radius: 6px; border: 1px solid var(--border-color); text-align: center; margin-bottom: 15px;">
+        <span style="font-size: 12px; font-weight: bold; color: #666;">LACAGTA AMAANADA KU JIRTA</span>
+        <div id="amDetailBalance" style="font-size: 28px; font-weight: bold; color: #28a745;">$0.00</div>
+      </div>
+
+      <div class="input-group" style="margin-bottom: 10px;">
+        <label style="font-weight:bold; font-size:12px;">GELI AMA KA BIXI LACAG AMAANO:</label>
+        <input type="number" id="amTransactionAmount" placeholder="Qiyaasta lacagta ($)...">
+        <input type="text" id="amTransactionNote" placeholder="Faahfaahin / Xusuusin...">
+        <input type="text" id="amSender" placeholder="Soo diraha (Sender)...">
+        <input type="text" id="amReceiver" placeholder="Loo soo diraha / Qaataha (Receiver)...">
+
+        <div class="btn-grid" style="margin-bottom: 0;">
+          <button onclick="updateAmaanoBalance('deposit')" class="btn-success">+ Soo Dhig</button>
+          <button onclick="updateAmaanoBalance('withdraw')" class="btn-danger">- Ka Bixiso</button>
+        </div>
+      </div>
+
+      <h4 style="margin-top:10px; margin-bottom:5px; font-size:13px;">📋 Taariikhda Amaanada (History):</h4>
+      <div id="amaanoHistoryList" style="max-height:160px; overflow-y:auto; background:var(--container-bg); padding:8px; border-radius:5px; border:1px solid var(--border-color); margin-bottom:10px;"></div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+        <button onclick="sendAmaanoSMS()" class="btn-warning" style="font-size:12px;">📱 Dir SMS Amaano</button>
+        <button onclick="deleteAmaanoClient()" class="btn-danger" style="font-size:12px;">Tirtir Faylka</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SECTION 3: MACAAMIISHA GRID -->
+  <div id="viewMacaamiishaSection" class="hidden-section">
+    <div class="section-badge-header" style="background: rgba(255,193,7,0.15); color: #856404;">
+      <span>👥 Dhamaan Macaamiisha</span>
+    </div>
+    <div id="macaamiishaGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px;"></div>
+  </div>
+
+  <!-- BOTTOM THEME SECTION -->
+  <div class="theme-font-section">
+    <div class="sub-btn-group">
+      <span style="font-size:11px; font-weight:bold;">Theme:</span>
+      <div class="mini-btn-grid">
+        <button class="theme-btn active" id="btnThemeLight" onclick="changeTheme('light', event)">Light</button>
+        <button class="theme-btn" id="btnThemeDark" onclick="changeTheme('dark', event)">Dark</button>
+      </div>
+    </div>
+    <div class="sub-btn-group">
+      <span style="font-size:11px; font-weight:bold;">Font Size:</span>
+      <div class="mini-btn-grid mini-btn-grid-three">
+        <button class="font-btn" onclick="changeFont('small', event)">S</button>
+        <button class="font-btn active" onclick="changeFont('medium', event)">M</button>
+        <button class="font-btn" onclick="changeFont('large', event)">L</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let clients = [];       
+let amaanoClients = []; 
+let activeClientIndex = null;
+let activeAmaanoIndex = null;
+
+const furayaashaSanadka = { 1: "9352", 2: "4810", 3: "7264", 4: "1598", 5: "3641", 6: "8523", 7: "2047", 8: "6139", 9: "5082", 10: "7415", 11: "3968", 12: "8251" };
+
+window.onload = function() {
+  let isPaid = localStorage.getItem("is_subscription_paid") === "true";
+  let bishaHadda = new Date().getMonth() + 1;
+  let lastPaidMonth = parseInt(localStorage.getItem("last_paid_month")) || 0;
+
+  if (bishaHadda !== lastPaidMonth) {
+    localStorage.setItem("is_subscription_paid", "false");
+    isPaid = false;
+  }
+
+  let maalintaHadda = new Date().getDate();
+
+  if (!isPaid && maalintaHadda >= 1) {
+    document.getElementById("lockBox").style.display = "flex";
+    document.getElementById("dynamicLoginOverlay").style.display = "none";
+    toggleMainAppVisibility(false);
+    return;
+  }
+
+  document.getElementById("dynamicPasswordInput").value = "";
+  document.getElementById("dynamicLoginOverlay").style.display = "flex";
+  toggleMainAppVisibility(false);
+};
+
+function toggleMenu() {
+  document.getElementById("myDropdown").classList.toggle("show-dropdown");
+}
+
+window.onclick = function(event) {
+  if (!event.target.matches('.menu-btn')) {
+    let dropdowns = document.getElementsByClassName("dropdown-content");
+    for (let i = 0; i < dropdowns.length; i++) {
+      let openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show-dropdown')) {
+        openDropdown.classList.remove('show-dropdown');
+      }
+    }
+  }
+}
+
+function switchView(viewName) {
+  document.getElementById("viewDebtsSection").classList.add("hidden-section");
+  document.getElementById("viewAmaanadaSection").classList.add("hidden-section");
+  document.getElementById("viewMacaamiishaSection").classList.add("hidden-section");
+
+  if (viewName === 'debts') {
+    document.getElementById("viewDebtsSection").classList.remove("hidden-section");
+    render();
+  } else if (viewName === 'amaanada') {
+    document.getElementById("viewAmaanadaSection").classList.remove("hidden-section");
+    closeAmaanoDetail(); 
+    renderAmaanada();
+  } else if (viewName === 'macaamiisha') {
+    document.getElementById("viewMacaamiishaSection").classList.remove("hidden-section");
+    renderMacaamiishaGrid();
+  }
+}
+
+function checkDynamicPassword() {
+  let userInput = document.getElementById("dynamicPasswordInput").value.trim();
+  let errorText = document.getElementById("dynamicLoginError");
+  if (userInput === "") { alert("Fadlan qor password-ka!"); return; }
+
+  if (userInput !== "Hanti@2026") {
+    errorText.style.color = "#f85149";
+    errorText.innerText = "❌ Password waa khaldan yahay!";
+    errorText.style.display = "block";
+    return; 
+  }
+
+  errorText.style.display = "none";
+  localStorage.setItem("dukaan_password", userInput);
+  
+  clients = JSON.parse(localStorage.getItem("DATA_DEBTS_" + userInput)) || [];
+  amaanoClients = JSON.parse(localStorage.getItem("DATA_AMAANO_" + userInput)) || [];
+
+  document.getElementById("dynamicLoginOverlay").style.display = "none";
+  toggleMainAppVisibility(true);
+  render();
+}
+
+function save() { 
+  let pass = localStorage.getItem("dukaan_password"); 
+  if(pass) { 
+    localStorage.setItem("DATA_DEBTS_" + pass, JSON.stringify(clients)); 
+    localStorage.setItem("DATA_AMAANO_" + pass, JSON.stringify(amaanoClients)); 
+  } 
+  render(); 
+  renderAmaanada();
+}
+
+/* DEYMAHA SECTION */
+function render() {
+  let area = document.getElementById("area");
+  let searchVal = document.getElementById("sBar").value.toLowerCase().trim();
+  area.innerHTML = "";
+  let totalGuud = 0;
+
+  document.getElementById("countDebts").innerText = clients.length;
+
+  let sortedClients = clients.map((c, originalIndex) => ({ ...c, originalIndex }))
+                             .sort((a, b) => b.bal - a.bal);
+
+  let filtered = sortedClients.filter(c => c.name.toLowerCase().includes(searchVal) || c.phone.includes(searchVal));
+
+  filtered.forEach((c) => {
+    totalGuud += c.bal;
+    let row = document.createElement("div");
+    row.className = "customer-row";
+    row.onclick = () => { openDetailsModal(c.originalIndex); };
+    row.innerHTML = `<div class="customer-info-left"><span class="customer-name-text">${c.name}</span><span class="customer-phone-text">📞 ${c.phone}</span></div><div class="customer-balance-right">$${c.bal.toFixed(2)}</div>`; 
+    area.appendChild(row); 
+  }); 
+  document.getElementById("tGuud").innerText = "Total Deyn: $" + totalGuud.toFixed(2);
+}
+
+function addC() {
+  let n = document.getElementById("cName").value.trim(); 
+  let p = document.getElementById("cPhone").value.trim(); 
+  let pin = document.getElementById("cPin").value.trim() || "1234";
+  if(!n || !p) { alert("Buuxi Magaca iyo Telefanka!"); return; }
+  clients.push({ name: n, phone: p, pin: pin, bal: 0, hist: [] });
+  document.getElementById("cName").value = ""; 
+  document.getElementById("cPhone").value = ""; 
+  document.getElementById("cPin").value = "";
+  save();
+}
+
+/* AMAANADA SECTION */
+function addAmaanoClient() {
+  let n = document.getElementById("amName").value.trim();
+  let p = document.getElementById("amPhone").value.trim();
+  let pin = document.getElementById("amPin").value.trim() || "1234";
+  if(!n || !p) { alert("Buuxi Magaca iyo Telefanka Amaanada!"); return; }
+
+  amaanoClients.push({ name: n, phone: p, pin: pin, bal: 0, hist: [] });
+  document.getElementById("amName").value = "";
+  document.getElementById("amPhone").value = "";
+  document.getElementById("amPin").value = "";
+  save();
+}
+
+function renderAmaanada() {
+  const container = document.getElementById("amaanadaList");
+  document.getElementById("countAmaanada").innerText = amaanoClients.length;
+  container.innerHTML = "";
+  let totalAmaano = 0;
+
+  amaanoClients.forEach((c, index) => {
+    totalAmaano += c.bal;
+    let cardBtn = document.createElement("div");
+    cardBtn.className = "amaano-card-btn";
+    cardBtn.innerHTML = `
+      <div class="amaano-checkbox-wrapper">
+        <input type="checkbox" class="custom-chk" id="chk_amaano_${index}" onclick="event.stopPropagation(); openAmaanoDetail(${index});">
+        <div class="customer-info-left" onclick="openAmaanoDetail(${index})">
+          <span class="customer-name-text">📄 ${c.name}</span>
+          <span class="customer-phone-text">📞 Tel: ${c.phone}</span>
+        </div>
+      </div>
+      <div class="amount-badge-amaano" onclick="openAmaanoDetail(${index})">$${c.bal.toFixed(2)} ➔</div>
+    `;
+    container.appendChild(cardBtn);
+  });
+
+  document.getElementById("tAmaanoGuud").innerText = "Total Amaano: $" + totalAmaano.toFixed(2);
+}
+
+function openAmaanoDetail(index) {
+  activeAmaanoIndex = index;
+  let client = amaanoClients[index];
+  document.getElementById("amDetailName").innerText = "👤 " + client.name;
+  document.getElementById("amDetailPhone").innerText = client.phone || "—";
+  document.getElementById("amDetailBalance").innerText = "$" + client.bal.toFixed(2);
+
+  let histList = document.getElementById("amaanoHistoryList");
+  histList.innerHTML = "";
+  if (client.hist && client.hist.length > 0) {
+    client.hist.forEach(h => {
+      let parts = h.split('|');
+      if (parts.length >= 5) {
+        let isDeposit = parts[1] === 'Deposit';
+        let desc = parts[3] || (isDeposit ? 'Soo dhigasho lacag' : 'Ka bixid lacag');
+        let sender = parts[5] ? parts[5].trim() : '';
+        let receiver = parts[6] ? parts[6].trim() : '';
+
+        let detailsHTML = `<div style="font-size:12px; font-weight:bold; color:#444;">📝 ${desc}</div>`;
+        
+        if (sender || receiver) {
+          detailsHTML += `<div style="margin-top:3px; font-size:11px; display:flex; gap:5px; flex-wrap:wrap;">`;
+          if (sender) {
+            detailsHTML += `<span style="background:#e3f2fd; color:#0d47a1; padding:2px 6px; border-radius:4px; font-weight:600;">📥 Sender: ${sender}</span>`;
+          }
+          if (receiver) {
+            detailsHTML += `<span style="background:#fbe9e7; color:#c62828; padding:2px 6px; border-radius:4px; font-weight:600;">📤 Receiver: ${receiver}</span>`;
+          }
+          detailsHTML += `</div>`;
+        }
+
+        histList.innerHTML += `
+          <div style="border-bottom:1px solid var(--border-color); padding:8px 4px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-size:11px; color:#777;">🕒 ${parts[4]}</span>
+              <b style="font-size:14px; color:${isDeposit?'#28a745':'#dc3545'};">${isDeposit?'+':'-'}$${parts[2]}</b>
+            </div>
+            ${detailsHTML}
+          </div>`;
+      }
+    });
+  } else {
+    histList.innerHTML = `<p style="font-size:12px; color:#999; text-align:center; padding:10px;">Wax history ah ma jiraan</p>`;
+  }
+
+  document.getElementById("amaanoMainPage").classList.add("hidden-section");
+  document.getElementById("amaanoDetailPage").classList.remove("hidden-section");
+}
+
+function closeAmaanoDetail() {
+  activeAmaanoIndex = null;
+  document.getElementById("amaanoDetailPage").classList.add("hidden-section");
+  document.getElementById("amaanoMainPage").classList.remove("hidden-section");
+}
+
+function updateAmaanoBalance(type) {
+  if (activeAmaanoIndex === null) return;
+  let amt = parseFloat(document.getElementById("amTransactionAmount").value) || 0;
+  let note = document.getElementById("amTransactionNote").value.trim();
+  let sender = document.getElementById("amSender").value.trim();
+  let receiver = document.getElementById("amReceiver").value.trim();
+
+  if (amt <= 0) { alert("Geli lacag sax ah!"); return; }
+
+  let client = amaanoClients[activeAmaanoIndex];
+  if (!client.hist) client.hist = [];
+  let waqti = new Date().toLocaleString();
+
+  if (type === 'deposit') {
+    client.bal += amt;
+    let desc = note !== "" ? note : "Soo dhigasho lacag";
+    client.hist.unshift(`AMAANO_MARKER|Deposit|${amt.toFixed(2)}|${desc}|${waqti}|${sender}|${receiver}`);
+  } else {
+    if (amt > client.bal) { alert("Lacagta ku jirta way ka yar tahay tan aad kala baxayso!"); return; }
+    client.bal -= amt;
+    let desc = note !== "" ? note : "Ka bixid lacag";
+    client.hist.unshift(`AMAANO_MARKER|Withdraw|${amt.toFixed(2)}|${desc}|${waqti}|${sender}|${receiver}`);
+  }
+
+  document.getElementById("amTransactionAmount").value = "";
+  document.getElementById("amTransactionNote").value = "";
+  document.getElementById("amSender").value = "";
+  document.getElementById("amReceiver").value = "";
+
+  save();
+  openAmaanoDetail(activeAmaanoIndex);
+}
+
+function deleteAmaanoClient() {
+  if (activeAmaanoIndex === null) return;
+  if (confirm("Ma hubtaa inaad tirtirto faylkan Amaanada?")) {
+    amaanoClients.splice(activeAmaanoIndex, 1);
+    save();
+    closeAmaanoDetail();
+  }
+}
+
+/* SMS FEATURES */
+function sendAmaanoSMS() {
+  if (activeAmaanoIndex === null) return;
+  let c = amaanoClients[activeAmaanoIndex];
+  let msg = `Nabadgelyo ${c.name}, Diiwaanka DebtWatcher: $${c.bal.toFixed(2)} ayaa lagugu leeyahay fadlan soo dir. Mahadsanid!`;
+  window.open(`sms:${c.phone}?body=${encodeURIComponent(msg)}`, '_blank');
+}
+/* MACAAMIISHA GRID */
+function renderMacaamiishaGrid() {
+  const grid = document.getElementById("macaamiishaGrid");
+  grid.innerHTML = "";
+
+  let allNames = [...clients.map(c => ({...c, type: 'Deyn'})), ...amaanoClients.map(a => ({...a, type: 'Amaano'}))];
+
+  allNames.forEach((c) => {
+    let card = document.createElement("div");
+    card.style.cssText = "background:rgba(0,0,0,0.03); padding:10px; border-radius:6px; border:1px solid var(--border-color); text-align:left;";
+    card.innerHTML = `<b>${c.name}</b> (${c.type})<br><small style="color:#666;">📞 ${c.phone}</small><br><b style="color:${c.type==='Deyn'?'#dc3545':'#28a745'};">$${c.bal.toFixed(2)}</b>`;
+    grid.appendChild(card);
+  });
+}
+
+function handleLockSubmit() {
+  let inputKey = document.getElementById("subscription-key").value.trim();
+  let bishaHadda = new Date().getMonth() + 1;
+
+  if (inputKey === furayaashaSanadka[bishaHadda] || inputKey === "7700") {
+    localStorage.setItem("is_subscription_paid", "true");
+    localStorage.setItem("last_paid_month", bishaHadda);
+    document.getElementById("lockBox").style.display = "none";
+    document.getElementById("dynamicLoginOverlay").style.display = "flex";
+  } else {
+    document.getElementById("error-msg").style.display = "block";
+  }
+}
+
+function toggleMainAppVisibility(show) {
+  let mainContainer = document.getElementById("mainApp");
+  if (mainContainer) mainContainer.style.display = show ? "block" : "none";
+}
+
+function changeTheme(theme, event) {
+  document.body.className = theme + '-theme';
+  document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
+  if (event && event.target) event.target.classList.add('active');
+}
+
+function changeFont(size, event) {
+  const root = document.documentElement;
+  document.querySelectorAll('.font-btn').forEach(btn => btn.classList.remove('active'));
+  if (event && event.target) event.target.classList.add('active');
+  if (size === 'small') { root.style.setProperty('--main-font', '12px'); root.style.setProperty('--name-font', '14px'); root.style.setProperty('--price-font', '16px'); }
+  else if (size === 'medium') { root.style.setProperty('--main-font', '15px'); root.style.setProperty('--name-font', '18px'); root.style.setProperty('--price-font', '20px'); }
+  else if (size === 'large') { root.style.setProperty('--main-font', '18px'); root.style.setProperty('--name-font', '22px'); root.style.setProperty('--price-font', '24px'); }
+}
+
+function openDetailsModal(i) {
+  activeClientIndex = i;
+  let c = clients[i];
+
+  document.getElementById("modalClientName").innerText = "👤 " + c.name;
+  document.getElementById("modalClientPhone").innerText = c.phone || '—';
+  document.getElementById("modalClientPin").innerText = c.pin || '1234';
+  document.getElementById("modalClientBalance").innerText = "$" + c.bal.toFixed(2);
+
+  document.getElementById("modalPlusBtn").onclick = function() { updateFromModal('p'); };
+  document.getElementById("modalMinusBtn").onclick = function() { updateFromModal('m'); };
+  document.getElementById("modalDeleteBtn").onclick = function() {
+    if(confirm("Ma hubtaa tirtirista?")) { clients.splice(activeClientIndex, 1); save(); closeDetailsModal(); }
+  };
+
+  let histList = document.getElementById("modalHistoryList");
+  histList.innerHTML = "";
+  if (c.hist && c.hist.length > 0) {
+    c.hist.forEach(h => {
+      let parts = h.split('|');
+      if (parts.length >= 5) {
+        let isPlus = parts[1] === 'Plus';
+        histList.innerHTML += `<div style="display:flex; justify-content:space-between; border-bottom:1px solid #eee; padding:4px 0; font-size:12px;"><span>${parts[4]}<br><small style="color:#666;">${parts[3]}</small></span><b style="color:${isPlus?'#28a745':'#dc3545'};">${isPlus?'+':'-'}$${parts[2]}</b></div>`;
+      }
+    });
+  } else {
+    histList.innerHTML = `<p style="font-size:12px; color:#999; text-align:center;">Wax history ah ma jiraan</p>`;
+  }
+
+  document.getElementById("drawerOverlay").classList.add("active");
+  document.getElementById("detailsDrawer").classList.add("open");
+}
+
+/* UPDATED FOR INVOICE ONLY */
+function updateFromModal(type) {
+  let qty = parseFloat(document.getElementById("invQty").value) || 1;
+  let price = parseFloat(document.getElementById("invPrice").value) || 0;
+  let total = qty * price;
+  let itemDesc = document.getElementById("invDesc").value.trim();
+
+  if (total <= 0) { alert("Geli tirada/qiimaha alaabta!"); return; }
+
+  let desc = itemDesc ? `${itemDesc} (${qty}x$${price.toFixed(2)})` : `Alaab (${qty}x$${price.toFixed(2)})`;
+  let c = clients[activeClientIndex];
+  let waqti = new Date().toLocaleString();
+  if(!c.hist) c.hist = [];
+
+  if(type === 'p') {
+    c.bal += total;
+    c.hist.unshift(`DEBT_MARKER|Plus|${total.toFixed(2)}|${desc}|${waqti}`);
+  } else {
+    c.bal -= total;
+    c.hist.unshift(`PAID_MARKER|Paid|${total.toFixed(2)}|${desc}|${waqti}`);
+  }
+
+  document.getElementById("invDesc").value = "";
+  document.getElementById("invQty").value = "1";
+  document.getElementById("invPrice").value = "0.00";
+  document.getElementById("invTotalBox").innerText = "0.00";
+
+  save();
+  openDetailsModal(activeClientIndex);
+}
+
+function closeDetailsModal() {
+  document.getElementById("drawerOverlay").classList.remove("active");
+  document.getElementById("detailsDrawer").classList.remove("open");
+  activeClientIndex = null;
+}
+
+function calculateInvoiceTotal() {
+  let qty = parseFloat(document.getElementById('invQty').value) || 0;
+  let price = parseFloat(document.getElementById('invPrice').value) || 0;
+  document.getElementById('invTotalBox').innerText = (qty * price).toFixed(2);
+}
+
+function openCustomerPortal() { 
+  document.getElementById("dynamicLoginOverlay").style.display = "none";
+  toggleMainAppVisibility(false); 
+  document.getElementById("customerPortal").style.display = "flex"; 
+  document.getElementById("custPinInput").value = "";
+  document.getElementById("custResultArea").style.display = "none";
+}
+
+function exitCustomerPortal() { 
+  document.getElementById("customerPortal").style.display = "none"; 
+  document.getElementById("dynamicPasswordInput").value = "";
+  document.getElementById("dynamicLoginError").style.display = "none";
+  document.getElementById("dynamicLoginOverlay").style.display = "flex"; 
+}
+
+function checkCustomerPin() {
+  let enteredPin = document.getElementById("custPinInput").value.trim();
+  let resultArea = document.getElementById("custResultArea");
+  if (enteredPin === "") return;
+  let foundClient = [...clients, ...amaanoClients].find(c => c.pin === enteredPin);
+  resultArea.style.display = "block";
+  if (foundClient) {
+    resultArea.innerHTML = `<h3 style="color:#28a745;">${foundClient.name}</h3><div style="font-size:24px;color:#ff4d4d;">$${foundClient.bal.toFixed(2)}</div>`;
+  } else {
+    resultArea.innerHTML = `<p style="color:red;">PIN waa khalad!</p>`;
+  }
+}
+</script>
+</body>
+</html>
