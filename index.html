@@ -498,6 +498,9 @@ function renderAmaanada() {
   container.innerHTML = "";
   let totalAmaano = 0;
 
+ amaanoClients.sort((a, b) => parseFloat(b.bal || 0) - parseFloat(a.bal || 0));
+  
+  
   amaanoClients.forEach((c, index) => {
     totalAmaano += c.bal;
     let cardBtn = document.createElement("div");
