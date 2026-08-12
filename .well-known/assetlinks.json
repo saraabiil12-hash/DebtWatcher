@@ -1,0 +1,11 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "io.github.saraabiil12_hash.twa",
+    "sha256_cert_fingerprints": [
+      "12:AB:34:CD:56:EF:78:90:AB:CD:EF:12:34:56:78:90:12:34:56:78:90:AB:CD:EF:12:34:56:78:90:AB:CD:EF"
+    ]
+  }
+}]
+
