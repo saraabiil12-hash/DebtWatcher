@@ -413,24 +413,23 @@ function switchView(viewName) {
 function checkDynamicPassword() {
   let userInput = document.getElementById("dynamicPasswordInput").value.trim();
   let errorText = document.getElementById("dynamicLoginError");
-  if (userInput === "") { alert("Fadlan qor password-ka!"); return; }
 
-  if (userInput !== "Hanti@2026") {
-    errorText.style.color = "#f85149";
-    errorText.innerText = "❌ Password waa khaldan yahay!";
-    errorText.style.display = "block";
+  if (userInput === "") { 
+    alert("Fadlan qor password-ka!"); 
     return; 
   }
 
   errorText.style.display = "none";
   localStorage.setItem("dukaan_password", userInput);
-  
+
   clients = JSON.parse(localStorage.getItem("DATA_DEBTS_" + userInput)) || [];
   amaanoClients = JSON.parse(localStorage.getItem("DATA_AMAANO_" + userInput)) || [];
 
   document.getElementById("dynamicLoginOverlay").style.display = "none";
   toggleMainAppVisibility(true);
   render();
+}
+
 }
 
 function save() { 
