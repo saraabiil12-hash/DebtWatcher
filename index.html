@@ -141,14 +141,25 @@ button { padding: 10px; border: none; border-radius: 5px; font-weight: bold; cur
 </head>
 <body class="light-theme">
 
-<!-- LOCK BOX -->
+<!-- LOCK BOX (NIDAAMKA 12-KA BILOOD & TXN ID) -->
 <div id="lockBox" class="overlay-card" style="display: none;">
   <div class="card-content">
-    <h2 style="color:#ff4d4d;">App-ka waa Laxiray!</h2>
-    <p style="margin-bottom: 15px; font-size: 13px;">Fadlan bixi lacagta rukunka bishaan.</p>
-    <input type="password" id="subscription-key" placeholder="Geli furaha..." autocomplete="off">
-    <button onclick="handleLockSubmit()" class="btn-success" style="width: 100%; margin-top: 10px;">Foor App-ka</button>
-    <p id="error-msg" style="color: red; display: none; margin-top: 10px; font-size: 12px;">❌ Furaha waa khalad!</p>
+    <h2 style="color:#ff4d4d; margin-bottom: 5px;">🔒 App-ka waa Laxiray!</h2>
+    <p style="margin-bottom: 12px; font-size: 13px; color: #666;">Fadlan bixi lacagta rukunka bishaan ama geli furaha maamulaha.</p>
+    
+    <!-- Qaybta Bixinta Lacagta -->
+    <div style="background: rgba(0,0,0,0.03); padding: 10px; border-radius: 6px; margin-bottom: 12px; border: 1px solid var(--border-color);">
+      <p style="font-size: 11px; font-weight: bold; color: #333; margin-bottom: 6px;">SOO DIR LACAGTA (EVC/WAAFI):</p>
+      <input type="text" id="txnInput" placeholder="Geli TXN ID (Tixraaca Lacagta)..." style="margin-bottom: 6px;">
+      <button onclick="submitPaymentTransaction()" class="btn-warning" style="width: 100%; font-size: 12px;">Xaqiiji & Dir Lacagta</button>
+    </div>
+
+    <!-- Qaybta Furaha Maamulaha (7700) -->
+    <input type="password" id="subscription-key" placeholder="Geli furaha maamulaha (7700)..." autocomplete="off">
+    <button onclick="handleLockSubmit()" class="btn-success" style="width: 100%; margin-top: 8px;">Foor App-ka</button>
+    
+    <p id="error-msg" style="color: red; display: none; margin-top: 10px; font-size: 12px; font-weight: bold;">❌ Furaha waa khalad!</p>
+    <p id="lockStatusMsg" style="margin-top: 8px; font-size: 12px; font-weight: bold;"></p>
   </div>
 </div>
 
@@ -341,8 +352,10 @@ let clients = [];
 let amaanoClients = []; 
 let activeClientIndex = null;
 let activeAmaanoIndex = null;
+
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwkT-KS6MMAYHdJtPEu3he6Gw3aWoFd-MHxHoQ507ovzp1C7UwrXV8fWkde8id2cbkX/exec";
 
+// Furayaasha 12-ka Bilood ee Sanadka
 const furayaashaSanadka = { 1: "9352", 2: "4810", 3: "7264", 4: "1598", 5: "3641", 6: "8523", 7: "2047", 8: "6139", 9: "5082", 10: "7415", 11: "3968", 12: "8251" };
 
 window.onload = function() {
@@ -500,15 +513,12 @@ function renderAmaanada() {
   container.innerHTML = "";
   let totalAmaano = 0;
 
-  // Halkan ayaan ku daray Sorting-ka:
-  // Waxaan samaynay copy liiska ah, ka dibna waxaan u kala soocnay (sort) 
-  // qofka lacagta badan (b.bal) inuu kor u soo baxo.
   let sortedClients = amaanoClients.map((client, idx) => ({ ...client, originalIndex: idx }))
                                    .sort((a, b) => b.bal - a.bal);
 
   sortedClients.forEach((c) => {
     totalAmaano += c.bal;
-    let index = c.originalIndex; // Waxaan u isticmaalaynaa originalIndex si xogta qofka saxda ah loo furo
+    let index = c.originalIndex;
 
     let cardBtn = document.createElement("div");
     cardBtn.className = "amaano-card-btn";
@@ -527,7 +537,6 @@ function renderAmaanada() {
 
   document.getElementById("tAmaanoGuud").innerText = "Total Amaano: $" + totalAmaano.toFixed(2);
 }
-
 
 function openAmaanoDetail(index) {
   activeAmaanoIndex = index;
@@ -654,6 +663,7 @@ function renderMacaamiishaGrid() {
   });
 }
 
+/* HANDLE LOCK SUBMIT & TXN SUBMIT */
 function handleLockSubmit() {
   let inputKey = document.getElementById("subscription-key").value.trim();
   let bishaHadda = new Date().getMonth() + 1;
@@ -666,6 +676,42 @@ function handleLockSubmit() {
   } else {
     document.getElementById("error-msg").style.display = "block";
   }
+}
+
+function submitPaymentTransaction() {
+  let txnId = document.getElementById("txnInput").value.trim();
+  let statusMsg = document.getElementById("lockStatusMsg");
+  let bishaHadda = new Date().getMonth() + 1;
+
+  if (txnId === "") {
+    statusMsg.style.color = "red";
+    statusMsg.innerText = "Fadlan geli TXN ID-ga!";
+    return;
+  }
+
+  statusMsg.style.color = "blue";
+  statusMsg.innerText = "Lacagta waa la dirayaa...";
+
+  fetch(APPS_SCRIPT_URL, {
+    method: "POST",
+    mode: "no-cors",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({
+      "action": "submitPayment",
+      "txnId": txnId,
+      "month": "Bisha " + bishaHadda,
+      "date": new Date().toLocaleString()
+    })
+  })
+  .then(() => {
+    statusMsg.style.color = "green";
+    statusMsg.innerText = "Tixraaca waa la diray! Maamulaha ayaa xaqiijin doona.";
+    document.getElementById("txnInput").value = "";
+  })
+  .catch(error => {
+    statusMsg.style.color = "red";
+    statusMsg.innerText = "Cilad ayaa dhacday marka la dirayay xogta.";
+  });
 }
 
 function toggleMainAppVisibility(show) {
@@ -721,7 +767,6 @@ function openDetailsModal(i) {
   document.getElementById("detailsDrawer").classList.add("open");
 }
 
-/* FUNCTION-KA OO LA SAXAY (PAYMENT LOGIC) */
 function updateFromModal(type) {
   if (activeClientIndex === null) return;
   let c = clients[activeClientIndex];
@@ -732,7 +777,6 @@ function updateFromModal(type) {
   let total = 0;
 
   if (type === 'p') { 
-    // + DEYN
     if (!document.getElementById("invQty").value || qty <= 0) {
       alert("Geli tirada alaabta!");
       return;
@@ -742,12 +786,11 @@ function updateFromModal(type) {
     if(!c.hist) c.hist = [];
     c.hist.unshift(`DEBT_MARKER|Plus|${total.toFixed(2)}|${desc}|${waqti}`);
   } else { 
-    // - BIXIN
     if (price <= 0) {
       alert("Geli lacagta la bixiyay!");
       return;
     }
-    total = price; // Bixinta lacagta waa toos
+    total = price; 
     c.bal -= total;
     if(!c.hist) c.hist = [];
     c.hist.unshift(`PAID_MARKER|Paid|${total.toFixed(2)}|${desc}|${waqti}`);
