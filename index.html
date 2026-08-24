@@ -1,37 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
-<head> 
-https://sarabiil12-hash.github .io/DebtWatcher/
+<head>
 <link rel="manifest" href="manifest.json">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DebtWatcher</title>
 <style>
 :root {
-  --bg-color: #f4f6f9;
-  --container-bg: #ffffff;
-  --text-color: #333333;
-  --accent-color: #007bff;
-  --border-color: #cccccc;
-  --main-font: 15px;
-  --name-font: 18px;
-  --price-font: 20px;
+--bg-color: #f4f6f9;
+--container-bg: #ffffff;
+--text-color: #333333;
+--accent-color: #007bff;
+--border-color: #cccccc;
+--main-font: 15px;
+--name-font: 18px;
+--price-font: 20px;
 }
 
 .dark-theme {
-  --bg-color: #121212;
-  --container-bg: #1e1e1e;
-  --text-color: #e0e0e0;
-  --accent-color: #00adb5;
-  --border-color: #333;
+--bg-color: #121212;
+--container-bg: #1e1e1e;
+--text-color: #e0e0e0;
+--accent-color: #00adb5;
+--border-color: #333;
 }
 
 .light-theme {
-  --bg-color: #f4f6f9;
-  --container-bg: #ffffff;
-  --text-color: #333333;
-  --accent-color: #007bff;
-  --border-color: #cccccc;
+--bg-color: #f4f6f9;
+--container-bg: #ffffff;
+--text-color: #333333;
+--accent-color: #007bff;
+--border-color: #cccccc;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
@@ -85,6 +84,7 @@ button { padding: 10px; border: none; border-radius: 5px; font-weight: bold; cur
 
 .customer-row { display: flex; justify-content: space-between; align-items: center; padding: 10px; background: rgba(0,0,0,0.01); border-bottom: 1px solid var(--border-color); cursor: pointer; border-radius: 4px; margin-bottom: 4px; }
 
+/* AMAANO CARDS */
 .amaano-card-btn {
   display: flex;
   justify-content: space-between;
@@ -142,47 +142,36 @@ button { padding: 10px; border: none; border-radius: 5px; font-weight: bold; cur
 </head>
 <body class="light-theme">
 
-<!-- LOCK BOX (NIDAAMKA 12-KA BILOOD & TXN ID) -->
+<!-- LOCK BOX -->
 <div id="lockBox" class="overlay-card" style="display: none;">
-  <div class="card-content">
-    <h2 style="color:#ff4d4d; margin-bottom: 5px;">🔒 App-ka waa Laxiray!</h2>
-    <p style="margin-bottom: 12px; font-size: 13px; color: #666;">Fadlan bixi lacagta rukunka bishaan ama geli furaha maamulaha.</p>
-    
-    <!-- Qaybta Bixinta Lacagta -->
-    <div style="background: rgba(0,0,0,0.03); padding: 10px; border-radius: 6px; margin-bottom: 12px; border: 1px solid var(--border-color);">
-      <p style="font-size: 11px; font-weight: bold; color: #333; margin-bottom: 6px;">SOO DIR LACAGTA (EVC/WAAFI):</p>
-      <input type="text" id="txnInput" placeholder="Geli TXN ID (Tixraaca Lacagta)..." style="margin-bottom: 6px;">
-      <button onclick="submitPaymentTransaction()" class="btn-warning" style="width: 100%; font-size: 12px;">Xaqiiji & Dir Lacagta</button>
-    </div>
-
-    <!-- Qaybta Furaha Maamulaha (7700) -->
-    <input type="password" id="subscription-key" placeholder="Geli furaha maamulaha (7700)..." autocomplete="off">
-    <button onclick="handleLockSubmit()" class="btn-success" style="width: 100%; margin-top: 8px;">Foor App-ka</button>
-    
-    <p id="error-msg" style="color: red; display: none; margin-top: 10px; font-size: 12px; font-weight: bold;">❌ Furaha waa khalad!</p>
-    <p id="lockStatusMsg" style="margin-top: 8px; font-size: 12px; font-weight: bold;"></p>
-  </div>
+<div class="card-content">
+<h2 style="color:#ff4d4d;">App-ka waa Laxiray!</h2>
+<p style="margin-bottom: 15px; font-size: 13px;">Fadlan bixi lacagta rukunka bishaan.</p>
+<input type="password" id="subscription-key" placeholder="Geli furaha..." autocomplete="off">
+<button onclick="handleLockSubmit()" class="btn-success" style="width: 100%; margin-top: 10px;">Foor App-ka</button>
+<p id="error-msg" style="color: red; display: none; margin-top: 10px; font-size: 12px;">❌ Furaha waa khalad!</p>
+</div>
 </div>
 
 <!-- LOGIN OVERLAY -->
 <div id="dynamicLoginOverlay" class="overlay-card" style="display: none;">
-  <div class="card-content">
-    <p style="font-size: 15px; color: #007bff; font-weight: bold; margin-bottom: 15px;">Geli baasawarka dukaanka</p>
-    <input type="password" id="dynamicPasswordInput" placeholder="Password..." autocomplete="new-password">
-    <p id="dynamicLoginError" style="display:none; margin-top:8px; font-size:12px; font-weight:bold;"></p>
-    <button onclick="checkDynamicPassword()" style="width: 100%; margin-top: 12px;">Login</button>
-    <button onclick="openCustomerPortal()" class="btn-secondary" style="width:100%; margin-top:8px;">Portal-ka Macmiilka</button>
-  </div>
+<div class="card-content">
+<p style="font-size: 15px; color: #007bff; font-weight: bold; margin-bottom: 15px;">Geli baasawarka dukaanka</p>
+<input type="password" id="dynamicPasswordInput" placeholder="Password..." autocomplete="new-password">
+<p id="dynamicLoginError" style="display:none; margin-top:8px; font-size:12px; font-weight:bold;"></p>
+<button onclick="checkDynamicPassword()" style="width: 100%; margin-top: 12px;">Login</button>
+<button onclick="openCustomerPortal()" class="btn-secondary" style="width:100%; margin-top:8px;">Portal-ka Macmiilka</button>
+</div>
 </div>
 
 <!-- CUSTOMER PORTAL -->
 <div id="customerPortal" class="overlay-card" style="display:none;">
-  <div class="card-content">
-    <h2>Portal-ka Macmiilka</h2>
-    <input type="password" id="custPinInput" placeholder="Geli PIN-ka..." oninput="checkCustomerPin()" autocomplete="off">
-    <div id="custResultArea" style="margin-top:10px; padding:10px; display:none;"></div>
-    <button onclick="exitCustomerPortal()" class="btn-danger" style="width:100%; margin-top:10px;">Ka Bax</button>
-  </div>
+<div class="card-content">
+<h2>Portal-ka Macmiilka</h2>
+<input type="password" id="custPinInput" placeholder="Geli PIN-ka..." oninput="checkCustomerPin()" autocomplete="off">
+<div id="custResultArea" style="margin-top:10px; padding:10px; display:none;"></div>
+<button onclick="exitCustomerPortal()" class="btn-danger" style="width:100%; margin-top:10px;">Ka Bax</button>
+</div>
 </div>
 
 <!-- DRAWER OVERLAY & SIDE DRAWER (DEYMAHA) -->
@@ -192,6 +181,7 @@ button { padding: 10px; border: none; border-radius: 5px; font-weight: bold; cur
   <div style="font-size:12px; color:#666; margin-bottom:10px;">Tel: <span id="modalClientPhone">—</span> | PIN: <span id="modalClientPin">1234</span></div>
   <div id="modalClientBalance" style="font-size:30px; font-weight:bold; color:#dc3545; margin-bottom:10px;">$0.00</div>
 
+  <!-- BOONADA ALAABTA (INVOICE) ONLY -->
   <div class="invoice-box">
     <h4 style="margin-bottom: 10px; color: var(--accent-color);">📦 Boonada Alaabta (Invoice)</h4>
     <div id="modeInvoiceSection">
@@ -232,7 +222,6 @@ button { padding: 10px; border: none; border-radius: 5px; font-weight: bold; cur
         <a href="#" onclick="switchView('debts')">📝 Diiwaanka Deymaha</a>
         <a href="#" onclick="switchView('amaanada')">💵 Amaanada (MSM)</a>
         <a href="#" onclick="switchView('macaamiisha')">👥 Qaybta Macaamiisha</a>
-        <a href="#" onclick="logoutApp()" style="color: #dc3545;">🚪 Ka Bax (Logout)</a>
       </div>
     </div>
     <div id="merchantTitle" class="merchant-title-style">DebtWatcher</div>
@@ -264,6 +253,8 @@ button { padding: 10px; border: none; border-radius: 5px; font-weight: bold; cur
 
   <!-- SECTION 2: AMAANADA -->
   <div id="viewAmaanadaSection" class="hidden-section">
+    
+    <!-- BOGGA 1-AAD: LIISKA AMAANADA -->
     <div id="amaanoMainPage">
       <div class="section-badge-header" style="background: rgba(40,167,69,0.1); color: #28a745; justify-content: center;">
         <span>Macaamiisha: <b id="countAmaanada">0</b></span>
@@ -286,6 +277,7 @@ button { padding: 10px; border: none; border-radius: 5px; font-weight: bold; cur
       </div>
     </div>
 
+    <!-- BOGGA 2-AAD: GUDAHA FAYLKA AMAANADA & HISTORY-GA -->
     <div id="amaanoDetailPage" class="hidden-section" style="background: rgba(0,0,0,0.02); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
       <button onclick="closeAmaanoDetail()" class="btn-secondary" style="margin-bottom:12px; width: 100%;">⬅ Dib u Noqo Liiska Amaanada</button>
       
@@ -318,6 +310,7 @@ button { padding: 10px; border: none; border-radius: 5px; font-weight: bold; cur
         <button onclick="deleteAmaanoClient()" class="btn-danger" style="font-size:12px;">Tirtir Faylka</button>
       </div>
     </div>
+
   </div>
 
   <!-- SECTION 3: MACAAMIISHA GRID -->
@@ -353,10 +346,9 @@ let clients = [];
 let amaanoClients = []; 
 let activeClientIndex = null;
 let activeAmaanoIndex = null;
-
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwkT-KS6MMAYHdJtPEu3he6Gw3aWoFd-MHxHoQ507ovzp1C7UwrXV8fWkde8id2cbkX/exec";
 
-// Furayaasha 12-ka Bilood ee Sanadka
+
 const furayaashaSanadka = { 1: "9352", 2: "4810", 3: "7264", 4: "1598", 5: "3641", 6: "8523", 7: "2047", 8: "6139", 9: "5082", 10: "7415", 11: "3968", 12: "8251" };
 
 window.onload = function() {
@@ -382,13 +374,6 @@ window.onload = function() {
   document.getElementById("dynamicLoginOverlay").style.display = "flex";
   toggleMainAppVisibility(false);
 };
-
-function logoutApp() {
-  if (confirm("Ma hubtaa inaad ka baxdo? Xogtaada laguma arki doono aaladan madama la tirtirayo Session-ka.")) {
-    localStorage.removeItem("dukaan_password");
-    location.reload();
-  }
-}
 
 function toggleMenu() {
   document.getElementById("myDropdown").classList.toggle("show-dropdown");
@@ -514,13 +499,8 @@ function renderAmaanada() {
   container.innerHTML = "";
   let totalAmaano = 0;
 
-  let sortedClients = amaanoClients.map((client, idx) => ({ ...client, originalIndex: idx }))
-                                   .sort((a, b) => b.bal - a.bal);
-
-  sortedClients.forEach((c) => {
+  amaanoClients.forEach((c, index) => {
     totalAmaano += c.bal;
-    let index = c.originalIndex;
-
     let cardBtn = document.createElement("div");
     cardBtn.className = "amaano-card-btn";
     cardBtn.innerHTML = `
@@ -636,20 +616,14 @@ function deleteAmaanoClient() {
   }
 }
 
+/* SMS FEATURES */
 function sendAmaanoSMS() {
   if (activeAmaanoIndex === null) return;
   let c = amaanoClients[activeAmaanoIndex];
   let msg = `Nabadgelyo ${c.name}, Diiwaanka DebtWatcher: $${c.bal.toFixed(2)} ayaa lagugu leeyahay fadlan soo dir. Mahadsanid!`;
   window.open(`sms:${c.phone}?body=${encodeURIComponent(msg)}`, '_blank');
 }
-
-function sendDebtSMS() {
-  if (activeClientIndex === null) return;
-  let c = clients[activeClientIndex];
-  let msg = `Nabadgelyo ${c.name}, Diiwaanka DebtWatcher: $${c.bal.toFixed(2)} ayaa lagu leeyahay fadlan bixi. Mahadsanid!`;
-  window.open(`sms:${c.phone}?body=${encodeURIComponent(msg)}`, '_blank');
-}
-
+/* MACAAMIISHA GRID */
 function renderMacaamiishaGrid() {
   const grid = document.getElementById("macaamiishaGrid");
   grid.innerHTML = "";
@@ -664,7 +638,6 @@ function renderMacaamiishaGrid() {
   });
 }
 
-/* HANDLE LOCK SUBMIT & TXN SUBMIT */
 function handleLockSubmit() {
   let inputKey = document.getElementById("subscription-key").value.trim();
   let bishaHadda = new Date().getMonth() + 1;
@@ -677,42 +650,6 @@ function handleLockSubmit() {
   } else {
     document.getElementById("error-msg").style.display = "block";
   }
-}
-
-function submitPaymentTransaction() {
-  let txnId = document.getElementById("txnInput").value.trim();
-  let statusMsg = document.getElementById("lockStatusMsg");
-  let bishaHadda = new Date().getMonth() + 1;
-
-  if (txnId === "") {
-    statusMsg.style.color = "red";
-    statusMsg.innerText = "Fadlan geli TXN ID-ga!";
-    return;
-  }
-
-  statusMsg.style.color = "blue";
-  statusMsg.innerText = "Lacagta waa la dirayaa...";
-
-  fetch(APPS_SCRIPT_URL, {
-    method: "POST",
-    mode: "no-cors",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams({
-      "action": "submitPayment",
-      "txnId": txnId,
-      "month": "Bisha " + bishaHadda,
-      "date": new Date().toLocaleString()
-    })
-  })
-  .then(() => {
-    statusMsg.style.color = "green";
-    statusMsg.innerText = "Tixraaca waa la diray! Maamulaha ayaa xaqiijin doona.";
-    document.getElementById("txnInput").value = "";
-  })
-  .catch(error => {
-    statusMsg.style.color = "red";
-    statusMsg.innerText = "Cilad ayaa dhacday marka la dirayay xogta.";
-  });
 }
 
 function toggleMainAppVisibility(show) {
@@ -768,32 +705,25 @@ function openDetailsModal(i) {
   document.getElementById("detailsDrawer").classList.add("open");
 }
 
+/* UPDATED FOR INVOICE ONLY */
 function updateFromModal(type) {
-  if (activeClientIndex === null) return;
-  let c = clients[activeClientIndex];
-  let price = parseFloat(document.getElementById("invPrice").value) || 0;
   let qty = parseFloat(document.getElementById("invQty").value) || 1;
-  let desc = document.getElementById("invDesc").value.trim() || (type === 'p' ? "Alaab" : "Bixin Lacag");
-  let waqti = new Date().toLocaleString();
-  let total = 0;
+  let price = parseFloat(document.getElementById("invPrice").value) || 0;
+  let total = qty * price;
+  let itemDesc = document.getElementById("invDesc").value.trim();
 
-  if (type === 'p') { 
-    if (!document.getElementById("invQty").value || qty <= 0) {
-      alert("Geli tirada alaabta!");
-      return;
-    }
-    total = price * qty;
+  if (total <= 0) { alert("Geli tirada/qiimaha alaabta!"); return; }
+
+  let desc = itemDesc ? `${itemDesc} (${qty}x$${price.toFixed(2)})` : `Alaab (${qty}x$${price.toFixed(2)})`;
+  let c = clients[activeClientIndex];
+  let waqti = new Date().toLocaleString();
+  if(!c.hist) c.hist = [];
+
+  if(type === 'p') {
     c.bal += total;
-    if(!c.hist) c.hist = [];
     c.hist.unshift(`DEBT_MARKER|Plus|${total.toFixed(2)}|${desc}|${waqti}`);
-  } else { 
-    if (price <= 0) {
-      alert("Geli lacagta la bixiyay!");
-      return;
-    }
-    total = price; 
+  } else {
     c.bal -= total;
-    if(!c.hist) c.hist = [];
     c.hist.unshift(`PAID_MARKER|Paid|${total.toFixed(2)}|${desc}|${waqti}`);
   }
 
@@ -844,6 +774,42 @@ function checkCustomerPin() {
   } else {
     resultArea.innerHTML = `<p style="color:red;">PIN waa khalad!</p>`;
   }
+}
+// Function-ka Login-ka Dukaanka
+function loginDukaan() {
+    const enteredPassword = document.getElementById("passwordInput").value;
+    
+    // 1. Ka soo qaad password-ka dukaanku hore u samaystay LocalStorage-ka
+    const savedPassword = localStorage.getItem("dukaan_password");
+
+    // 2. Hadii dukaanku uusan waligiis password samaysanin
+    if (!savedPassword) {
+        // U ogolaaw in uu markiiba samaysto password cusub
+        localStorage.setItem("dukaan_password", enteredPassword);
+        alert("Baasaward cusub ayaa loo sameeyay dukaanka! Hada waad pasasay.");
+        window.location.href = "dashboard.html"; // Bogga dukaanka
+        return;
+    }
+
+    // 3. Hadii password hore u jiro, hubi in uu sax yahay
+    if (enteredPassword === savedPassword) {
+        alert("Baasawardku waa sax!");
+        window.location.href = "dashboard.html";
+    } else {
+        alert("Baasawardku waa ma saxan yahay! Fadlan iteri ama samayso mid cusub.");
+    }
+}
+
+// Function-ka marka dukaanku uu rabto in uu Baasaward Cusub iskii u samaysto
+function badalBaasawardka() {
+    const newPass = prompt("Geli baasawardka cusub ee dukaanka:");
+    
+    if (newPass && newPass.trim() !== "") {
+        localStorage.setItem("dukaan_password", newPass.trim());
+        alert("Baasawardkiinii si guul leh ayaa loo beddelay!");
+    } else {
+        alert("Fadlan geli baasaward sax ah.");
+    }
 }
 </script>
 </body>
