@@ -346,8 +346,7 @@ let clients = [];
 let amaanoClients = []; 
 let activeClientIndex = null;
 let activeAmaanoIndex = null;
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwkT-KS6MMAYHdJtPEu3he6Gw3aWoFd-MHxHoQ507ovzp1C7UwrXV8fWkde8id2cbkX/exec";
-
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbygeiAz_p6glqhRt8YyjB_R-SRON5qZJtMEtTrnX3KZT4qFOINLWmdmX9FEHoUEcg3b/exec";
 
 const furayaashaSanadka = { 1: "9352", 2: "4810", 3: "7264", 4: "1598", 5: "3641", 6: "8523", 7: "2047", 8: "6139", 9: "5082", 10: "7415", 11: "3968", 12: "8251" };
 
@@ -623,6 +622,14 @@ function sendAmaanoSMS() {
   let msg = `Nabadgelyo ${c.name}, Diiwaanka DebtWatcher: $${c.bal.toFixed(2)} ayaa lagugu leeyahay fadlan soo dir. Mahadsanid!`;
   window.open(`sms:${c.phone}?body=${encodeURIComponent(msg)}`, '_blank');
 }
+
+function sendDebtSMS() {
+  if (activeClientIndex === null) return;
+  let c = clients[activeClientIndex];
+  let msg = `Nabadgelyo ${c.name}, Diiwaanka DebtWatcher: $${c.bal.toFixed(2)} ayaa lagugu leeyahay fadlan soo dir. Mahadsanid!`;
+  window.open(`sms:${c.phone}?body=${encodeURIComponent(msg)}`, '_blank');
+}
+
 /* MACAAMIISHA GRID */
 function renderMacaamiishaGrid() {
   const grid = document.getElementById("macaamiishaGrid");
@@ -774,42 +781,6 @@ function checkCustomerPin() {
   } else {
     resultArea.innerHTML = `<p style="color:red;">PIN waa khalad!</p>`;
   }
-}
-// Function-ka Login-ka Dukaanka
-function loginDukaan() {
-    const enteredPassword = document.getElementById("passwordInput").value;
-    
-    // 1. Ka soo qaad password-ka dukaanku hore u samaystay LocalStorage-ka
-    const savedPassword = localStorage.getItem("dukaan_password");
-
-    // 2. Hadii dukaanku uusan waligiis password samaysanin
-    if (!savedPassword) {
-        // U ogolaaw in uu markiiba samaysto password cusub
-        localStorage.setItem("dukaan_password", enteredPassword);
-        alert("Baasaward cusub ayaa loo sameeyay dukaanka! Hada waad pasasay.");
-        window.location.href = "dashboard.html"; // Bogga dukaanka
-        return;
-    }
-
-    // 3. Hadii password hore u jiro, hubi in uu sax yahay
-    if (enteredPassword === savedPassword) {
-        alert("Baasawardku waa sax!");
-        window.location.href = "dashboard.html";
-    } else {
-        alert("Baasawardku waa ma saxan yahay! Fadlan iteri ama samayso mid cusub.");
-    }
-}
-
-// Function-ka marka dukaanku uu rabto in uu Baasaward Cusub iskii u samaysto
-function badalBaasawardka() {
-    const newPass = prompt("Geli baasawardka cusub ee dukaanka:");
-    
-    if (newPass && newPass.trim() !== "") {
-        localStorage.setItem("dukaan_password", newPass.trim());
-        alert("Baasawardkiinii si guul leh ayaa loo beddelay!");
-    } else {
-        alert("Fadlan geli baasaward sax ah.");
-    }
 }
 </script>
 </body>
