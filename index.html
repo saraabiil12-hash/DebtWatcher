@@ -782,19 +782,6 @@ function checkCustomerPin() {
     resultArea.innerHTML = `<p style="color:red;">PIN waa khalad!</p>`;
   }
 }
-// Marka uu app-ku furmo
-window.onload = function() {
-  // Hubi haddii uu dukaankan cusub leeyahay Store ID ku kaydsan mobelkiisa
-  var currentStore = localStorage.getItem("my_store_id");
-
-  if (!currentStore) {
-    // Haddii uu qof cusub yahay, u sheeg inuu sameysto dukaankiisa cusub
-    showRegisterModal(); 
-  } else {
-    // Haddii uu hore u lahaa, toos ugu fur xogtiisa gaarka ah
-    loadStoreData(currentStore);
-  }
-};
 </script>
 </body>
 </html>
