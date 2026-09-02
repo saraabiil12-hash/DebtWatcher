@@ -446,34 +446,6 @@ function changeFont(size, event) {
   else if (size === 'medium') root.style.setProperty('--main-font', '15px');
   else if (size === 'large') root.style.setProperty('--main-font', '18px');
 }
-render();
-        syncToGoogleSheets();
-    }
-
-    function render() {
-        let area = document.getElementById("area");
-        let searchVal = document.getElementById("sBar").value.toLowerCase().trim();
-        area.innerHTML = "";
-        let totalGuud = 0;
-
-        let filtered = clients.filter(c => c.name.toLowerCase().includes(searchVal) || c.phone.includes(searchVal));
-
-        filtered.forEach((c, index) => {
-            let actualIndex = clients.indexOf(c);
-            totalGuud += c.bal;
-
-            let row = document.createElement("div");
-            row.className = "customer-row";
-            row.onclick = () => openDetailsModal(actualIndex);
-
-            row.innerHTML = `
-                <div class="customer-info-left">
-                    <span class="customer-name-text">${c.name}</span>
-                    <span class="customer-phone-text">📞 ${c.phone}</span>
-                </div>
-                <div class="customer-balance-right">$${c.bal.toFixed(2)}</div>
-            `;
-            area.appendChild(row);
-        });</script>
+</script>
 </body>
 </html>
