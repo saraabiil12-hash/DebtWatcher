@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="so">
 <head>  
 <link rel="manifest" href="manifest.json">
 <meta charset="UTF-8">
@@ -7,30 +7,29 @@
 <title>DebtWatcher</title>
 <style>
 :root {
---bg-color: #f4f6f9;
---container-bg: #ffffff;
---text-color: #333333;
---accent-color: #007bff;
---border-color: #cccccc;
---main-font: 15px;
---name-font: 18px;
---price-font: 20px;
+  --bg-color: #f4f6f9;
+  --container-bg: #ffffff;
+  --text-color: #333333;
+  --accent-color: #007bff;
+  --border-color: #cccccc;
+  --main-font: 15px;
+  --name-font: 18px;
+  --price-font: 20px;
 }
 
 .dark-theme {
---bg-color: #121212;
---container-bg: #1e1e1e;
---text-color: #e0e0e0;
---accent-color: #00adb5;
---border-color: #333;
+  --bg-color: #121212;
+  --container-bg: #1e1e1e;
+  --text-color: #e0e0e0;
+  --accent-color: #00adb5;
+  --border-color: #333;
 }
 
 .light-theme {
---bg-color: #f4f6f9;
---container-bg: #ffffff;
---text-color: #333333;
---accent-color: #007bff;
---border-color: #cccccc;
+  --bg-color: #f4f6f9;
+  --container-bg: #ffffff;
+  --text-color: #333333;
+  --accent-color: #007bff;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
@@ -47,42 +46,97 @@ body { background-color: var(--bg-color); color: var(--text-color); font-size: v
   position: relative;
 }
 
-.app-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 15px; }
-.menu-dropdown { position: relative; display: inline-block; }
-.menu-btn { background: var(--accent-color); color: white; padding: 8px 14px; font-size: 16px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+/* HEADER BULUUG AH OO CASRI AH */
+.app-header { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  background: linear-gradient(135deg, #0056b3, #007bff); 
+  padding: 14px 18px; 
+  border-radius: 8px; 
+  margin-bottom: 15px; 
+  box-shadow: 0 4px 10px rgba(0, 123, 255, 0.25);
+}
 
-.dropdown-content { display: none; position: absolute; left: 0; top: 40px; background-color: var(--container-bg); min-width: 220px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1000; border-radius: 6px; border: 1px solid var(--border-color); overflow: hidden; }
+.merchant-title-style { 
+  font-weight: bold; 
+  font-size: 22px; 
+  color: #ffffff; 
+  letter-spacing: 0.5px;
+}
+
+.menu-dropdown { position: relative; display: inline-block; }
+
+.menu-btn { 
+  background: rgba(255, 255, 255, 0.2); 
+  color: #ffffff; 
+  padding: 8px 16px; 
+  font-size: 15px; 
+  border: 1px solid rgba(255, 255, 255, 0.4); 
+  border-radius: 6px; 
+  cursor: pointer; 
+  font-weight: bold; 
+  backdrop-filter: blur(5px);
+  transition: background 0.2s;
+}
+
+.menu-btn:hover { background: rgba(255, 255, 255, 0.35); }
+
+.dropdown-content { display: none; position: absolute; left: 0; top: 45px; background-color: var(--container-bg); min-width: 220px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1000; border-radius: 6px; border: 1px solid var(--border-color); overflow: hidden; }
 .dropdown-content a { color: var(--text-color); padding: 12px 16px; text-decoration: none; display: block; font-weight: bold; font-size: 14px; border-bottom: 1px solid var(--border-color); }
 .dropdown-content a:hover { background-color: rgba(0,123,255,0.1); }
 .show-dropdown { display: block; }
 
-.merchant-title-style { font-weight: bold; font-size: 20px; color: var(--accent-color); }
 .app-content-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
-.input-group { display: flex; flex-direction: column; gap: 10px; background: rgba(0,0,0,0.02); padding: 12px; border-radius: 6px; border: 1px solid var(--border-color); }
+
+/* BAR-KA MAAMULKA / BADGE-KA BULUUGGA AH */
+.section-badge-header { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  background: linear-gradient(135deg, #0056b3, #007bff); 
+  color: #ffffff;
+  padding: 12px 16px; 
+  border-radius: 6px; 
+  margin-bottom: 15px; 
+  font-weight: bold; 
+  box-shadow: 0 2px 6px rgba(0,123,255,0.2);
+}
+
+.section-badge-header span { font-size: 15px; }
+.section-badge-header .count-pill { 
+  background: #ffffff; 
+  color: #0056b3; 
+  padding: 3px 10px; 
+  border-radius: 12px; 
+  font-size: 13px; 
+  font-weight: bold; 
+}
+
+.input-group { display: flex; flex-direction: column; gap: 10px; background: rgba(0,0,0,0.02); padding: 14px; border-radius: 6px; border: 1px solid var(--border-color); margin-bottom: 12px; }
 
 input { width: 100%; padding: 10px; border-radius: 5px; border: 1px solid var(--border-color); background: #fff; color: #333; font-size: 14px; }
 .dark-theme input { background: #2a2a2a; color: #fff; }
 
-.btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
 button { padding: 10px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 14px; background: var(--accent-color); color: #fff; }
-.btn-danger { background: #dc3545; }
-.btn-success { background: #28a745; }
-.btn-secondary { background: #6c757d; }
+.btn-danger { background: #dc3545; color: #fff; }
+.btn-success { background: #28a745; color: #fff; }
+.btn-secondary { background: #6c757d; color: #fff; }
 .btn-warning { background: #ffc107; color: #000; }
 
-.customer-row { display: flex; justify-content: space-between; align-items: center; padding: 10px; background: rgba(0,0,0,0.01); border-bottom: 1px solid var(--border-color); cursor: pointer; border-radius: 4px; margin-bottom: 4px; }
-.amaano-card-btn { display: flex; justify-content: space-between; align-items: center; background: rgba(40,167,69,0.05); border: 1px solid var(--border-color); border-left: 5px solid #28a745; padding: 12px 15px; margin-bottom: 8px; border-radius: 6px; cursor: pointer; width: 100%; }
+.customer-row { display: flex; flex-direction: column; gap: 8px; padding: 12px; background: rgba(0,0,0,0.01); border: 1px solid var(--border-color); border-radius: 6px; margin-bottom: 8px; }
+.customer-row-top { display: flex; justify-content: space-between; align-items: center; }
+.amaano-card-btn { display: flex; flex-direction: column; gap: 8px; background: rgba(40,167,69,0.05); border: 1px solid var(--border-color); border-left: 5px solid #28a745; padding: 12px; margin-bottom: 8px; border-radius: 6px; width: 100%; }
 
 .customer-info-left { display: flex; flex-direction: column; text-align: left; }
 .customer-name-text { font-size: var(--name-font); font-weight: bold; }
 .customer-phone-text { font-size: 12px; color: #666; }
 .customer-balance-right { font-size: var(--price-font); font-weight: bold; color: #dc3545; }
-.total-box { font-size: 18px; font-weight: bold; text-align: center; margin-top: 10px; padding: 10px; background: #cccccc; border-radius: 5px; color: var(--accent-color); }
-
-.section-badge-header { display: flex; justify-content: space-between; align-items: center; background: rgba(0,123,255,0.08); padding: 10px; border-radius: 6px; margin-bottom: 10px; font-weight: bold; }
+.total-box { font-size: 18px; font-weight: bold; text-align: center; margin-top: 10px; padding: 10px; background: #e9ecef; border-radius: 5px; color: var(--accent-color); }
+.dark-theme .total-box { background: #2b2b2b; }
 
 .overlay-card { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: flex; justify-content: center; align-items: center; z-index: 9999; padding: 15px; }
-.card-content { background: var(--container-bg); padding: 20px; border-radius: 10px; width: 100%; max-width: 420px; text-align: center; border: 1px solid var(--border-color); max-height: 90vh; overflow-y: auto; }
+.card-content { background: var(--container-bg); padding: 20px; border-radius: 10px; width: 100%; max-width: 450px; text-align: center; border: 1px solid var(--border-color); max-height: 90vh; overflow-y: auto; }
 
 .drawer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); display: none; z-index: 9998; opacity: 0; transition: opacity 0.3s ease; }
 .drawer-overlay.active { display: block; opacity: 1; }
@@ -90,199 +144,296 @@ button { padding: 10px; border: none; border-radius: 5px; font-weight: bold; cur
 .side-drawer { position: fixed; top: 0; right: -100%; width: 100%; max-width: 440px; height: 100%; background: var(--container-bg); box-shadow: -5px 0 25px rgba(0,0,0,0.15); transition: right 0.3s ease; z-index: 9999; display: flex; flex-direction: column; padding: 20px; overflow-y: auto; }
 .side-drawer.open { right: 0; }
 
+.warning-banner { background: #fff3cd; color: #856404; border: 1px solid #ffeeba; padding: 10px; border-radius: 6px; font-size: 13px; margin-bottom: 12px; text-align: center; font-weight: bold; display: none; }
+
 .theme-font-section { display: flex; justify-content: space-between; margin-top: 15px; padding-top: 10px; border-top: 1px solid var(--border-color); }
 .sub-btn-group { display: flex; flex-direction: column; gap: 4px; width: 48%; }
 .mini-btn-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; }
-.mini-btn-grid-three { grid-template-columns: repeat(3, 1fr); }
-.theme-btn, .font-btn { padding: 6px; font-size: 11px; background: #e0e0e0; color: #333; border: 1px solid var(--border-color); font-weight: bold; }
+.mini-btn-grid-three { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
+.theme-btn, .font-btn { padding: 6px; font-size: 11px; background: #e0e0e0; color: #333; border: 1px solid var(--border-color); font-weight: bold; cursor: pointer; }
 .theme-btn.active, .font-btn.active { background: var(--accent-color); color: #fff; }
+
+.action-btn-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+.action-btn-row button { padding: 6px 10px; font-size: 12px; border-radius: 4px; flex: 1; }
+
+.badge-tag { padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; }
+.badge-deyn { background: rgba(220,53,69,0.15); color: #dc3545; }
+.badge-amaano { background: rgba(40,167,69,0.15); color: #28a745; }
 
 .hidden-section { display: none !important; }
 </style>
 </head>
 <body class="light-theme">
 
-<!-- DIIWAANGELINTA MACMIILKA (CLIENT ONLY SCREEN) -->
+<!-- LOCKOUT OVERLAY -->
+<div id="appLockoutOverlay" class="overlay-card" style="display: none;">
+  <div class="card-content">
+    <h2 style="color: #dc3545; margin-bottom: 10px;">🔒 App Locked</h2>
+    <p style="font-size: 14px; margin-bottom: 15px; color: var(--text-color);">
+      Subscription expired. Please renew your plan.
+    </p>
+    <div style="background: rgba(0,123,255,0.1); padding: 12px; border-radius: 6px; margin-bottom: 15px;">
+      <p style="font-size: 13px; font-weight: bold;">Contact for activation:</p>
+      <p style="font-size: 18px; font-weight: bold; color: #007bff; margin-top: 5px;">📞 +252682501951</p>
+    </div>
+    <input type="text" id="activationCodeInput" placeholder="Enter activation code..." style="margin-bottom: 10px;">
+    <button onclick="unlockAppWithCode()" class="btn-success" style="width: 100%;">UNLOCK</button>
+  </div>
+</div>
+
+<!-- PORTAL-KA MACMIILKA -->
 <div id="customerPortal" class="overlay-card" style="display:flex;">
 <div class="card-content">
-<h2>📱 Diiwaangelinta Macmiilka</h2>
-<p style="font-size: 12px; color: #666; margin-bottom: 12px;">Geli PIN-kaaga si aad faylkaaga u furchid ama ugu diiwaangashatid:</p>
+<h2>📱 Customer Portal</h2>
+<p style="font-size: 12px; color: #666; margin-bottom: 12px;">Enter your PIN to access account:</p>
 
 <div id="custAuthForm">
-  <input type="password" id="custPinInput" placeholder="Geli PIN-kaaga..." autocomplete="off">
-  <button onclick="accessCustomerFiles()" class="btn-success" style="width:100%; margin-top:10px;">GAL FAYLASHA 🔓</button>
+  <input type="password" id="custPinInput" placeholder="Enter PIN..." autocomplete="off">
+  <button onclick="accessCustomerFiles()" class="btn-success" style="width:100%; margin-top:10px;">LOGIN</button>
 </div>
 
 <div id="custResultArea" style="margin-top:15px; display:none; text-align: left;">
-  <div style="background: rgba(0,123,255,0.05); padding: 10px; border-radius: 6px; border: 1px solid var(--accent-color); margin-bottom: 12px; text-align: center;">
-    <h3 id="portalClientTitle" style="color: var(--accent-color); margin-bottom: 4px;">👤 Soo Dhawoow</h3>
-    <div id="portalClientBal" style="font-size: 18px; font-weight: bold; color: #dc3545;">Baaqigaaga waa: $0.00</div>
+  <div style="background: rgba(0,123,255,0.05); padding: 12px; border-radius: 6px; border: 1px solid var(--accent-color); margin-bottom: 12px; text-align: center;">
+    <span id="portalAccountBadge" class="badge-tag badge-deyn">Deyn</span>
+    <h3 id="portalClientTitle" style="color: var(--accent-color); margin-top: 6px;">👤 Welcome</h3>
+    <div id="portalClientBal" style="font-size: 22px; font-weight: bold; color: #dc3545; margin-top: 4px;">Balance: $0.00</div>
   </div>
 
-  <div class="input-group" style="background: var(--container-bg);">
-    <h4 style="color: var(--accent-color); font-size: 14px;">📝 Diiwaan geli macmiil cusub:</h4>
-    <input type="text" id="pCustName" placeholder="Magaca Macmiilka">
-    <input type="number" id="pCustPhone" placeholder="Geli telka">
-    <input type="number" id="pCustPin" placeholder="Geli lambar sir (PIN)">
-    <button onclick="addClientFromPortal()" class="btn-success" style="width: 100%; margin-top: 5px;">Add. Kudar</button>
+  <div style="margin-bottom:15px;">
+    <h4 style="color: var(--accent-color); font-size: 14px; margin-bottom: 6px;">📜 History:</h4>
+    <div id="portalClientHistory" style="max-height: 180px; overflow-y: auto; background: rgba(0,0,0,0.02); padding: 8px; border-radius: 5px; border: 1px solid var(--border-color);"></div>
   </div>
+  <button onclick="resetPortalView()" class="btn-secondary" style="width:100%;">BACK</button>
 </div>
 
-<!-- BADHAN QARSOODI AH OO MAAMULHA KALIYA U AADAYO MAAMULKA -->
-<div style="margin-top:25px; border-top: 1px dashed var(--border-color); padding-top: 10px;">
-  <button onclick="showAdminLogin()" class="btn-secondary" style="font-size: 11px; padding: 6px 10px; background: transparent; color: #888;">🔑 Maamule Gal (Admin Login)</button>
+<div style="margin-top:20px; border-top: 1px dashed var(--border-color); padding-top: 10px;">
+  <button onclick="showAdminLogin()" class="btn-secondary" style="font-size: 11px; padding: 6px 10px; background: transparent; color: #888;">🔑 Admin Login</button>
 </div>
 </div>
+</div>
+<!-- Dukaamada Dropdown Bar (Maamulka) -->
+<div id="adminStoreHeader" style="background: #1e293b; color: white; padding: 10px 15px; border-radius: 8px; margin: 15px 0; display: flex; justify-content: space-between; align-items: center;">
+  <div>
+    <label style="font-size: 13px; font-weight: bold; margin-right: 5px;">Dukaanka:</label>
+    <select id="storeSelect" onchange="changeStore(this.value)" style="padding: 5px 10px; border-radius: 5px; background: #0f172a; color: white; border: 1px solid #475569;">
+      <option value="main">Dukaanka Weyn</option>
+    </select>
+  </div>
+  <button onclick="openNewStoreModal()" style="background: #2563eb; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-size: 12px; font-weight: bold;">
+    + Dar Dukaan
+  </button>
 </div>
 
 <!-- ADMIN LOGIN MODAL -->
 <div id="dynamicLoginOverlay" class="overlay-card" style="display: none;">
 <div class="card-content">
-<p style="font-size: 15px; color: #007bff; font-weight: bold; margin-bottom: 15px;">Geli baasawarka maamulka dukaanka</p>
-<!-- ATTR autocomplete off iyo value madhan si uusan waligiis qof ugu arkin baasawarka -->
-<input type="password" id="dynamicPasswordInput" placeholder="Geli Baasawarka Maamulka..." value="" autocomplete="off">
+<p style="font-size: 15px; color: #007bff; font-weight: bold; margin-bottom: 15px;">Enter Admin Password</p>
+<input type="password" id="dynamicPasswordInput" placeholder="Password..." autocomplete="off">
 <p id="dynamicLoginError" style="display:none; margin-top:8px; font-size:12px; font-weight:bold; color:red;"></p>
-<button onclick="checkDynamicPassword()" style="width: 100%; margin-top: 12px;">Gal Maamulka</button>
-<button onclick="hideAdminLogin()" class="btn-secondary" style="width:100%; margin-top:8px;">Dib u noqo</button>
+<button onclick="checkDynamicPassword()" style="width: 100%; margin-top: 12px;">LOGIN</button>
+<button onclick="hideAdminLogin()" class="btn-secondary" style="width:100%; margin-top:8px;">CANCEL</button>
 </div>
 </div>
 
 <!-- DRAWER OVERLAY & SIDE DRAWER -->
 <div id="drawerOverlay" class="drawer-overlay" onclick="closeDetailsModal()"></div>
 <div id="detailsDrawer" class="side-drawer">
-  <h2 id="modalClientName" style="text-align: left;">👤 Macmiil</h2>
+  <div style="display:flex; justify-content:space-between; align-items:center;">
+    <h2 id="modalClientName">👤 Customer</h2>
+    <span id="modalTypeBadge" class="badge-tag badge-deyn">Deyn</span>
+  </div>
   <div style="font-size:12px; color:#666; margin-bottom:10px;">Tel: <span id="modalClientPhone">—</span> | PIN: <span id="modalClientPin">1234</span></div>
-  <div id="modalClientBalance" style="font-size:30px; font-weight:bold; color:#dc3545; margin-bottom:10px;">$0.00</div>
+  <div id="modalClientBalance" style="font-size:28px; font-weight:bold; color:#dc3545; margin-bottom:10px;">$0.00</div>
 
-  <div class="invoice-box" style="border:1px dashed var(--border-color); padding:10px; margin-bottom:10px;">
-    <h4 style="margin-bottom: 10px; color: var(--accent-color);">📦 Boonada Alaabta</h4>
-    <input type="text" id="invDesc" placeholder="Faahfaahinta alaabta">
+  <div class="invoice-box" style="border:1px dashed var(--border-color); padding:10px; margin-bottom:10px; background: rgba(0,0,0,0.01); border-radius: 6px;">
+    <h4 id="boonaHeaderTitle" style="margin-bottom: 10px; color: var(--accent-color);">📦 Invoice Item</h4>
+    <input type="text" id="invDesc" placeholder="Description...">
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 6px;">
-      <input type="number" id="invQty" value="1" placeholder="Tirada">
-      <input type="number" id="invPrice" value="0.00" placeholder="Qiimaha">
+      <input type="number" id="invQty" value="1" placeholder="Qty">
+      <input type="number" id="invPrice" value="0.00" placeholder="Price ($)">
     </div>
+    <button id="addBoonaBtn" onclick="addInvoiceItem()" class="btn-success" style="margin-top: 8px; width: 100%;">ADD ITEM</button>
   </div>
 
-  <button onclick="closeDetailsModal()" class="btn-secondary" style="margin-top:5px; width:100%;">Dib u Noqo</button>
+  <div id="modalHistoryArea" style="margin-top: 10px; max-height: 200px; overflow-y: auto; text-align: left;"></div>
+
+  <button onclick="closeDetailsModal()" class="btn-secondary" style="margin-top:15px; width:100%;">CLOSE</button>
 </div>
 
-<!-- MAIN CONTAINER (ADMIN DASHBOARD ONLY) -->
+<!-- MAIN APP (ADMIN DASHBOARD) -->
 <div id="mainApp" class="container" style="display:none;">
+
+  <div id="warningBanner28" class="warning-banner">
+    ⚠️ Warning: Subscription renewal date is approaching (+252682501951).
+  </div>
+
+  <!-- HEADER -->
   <div class="app-header">
     <div class="menu-dropdown">
-      <button onclick="toggleMenu()" class="menu-btn">☰ Menu</button>
+      <button onclick="toggleMenu()" class="menu-btn">☰ MENU</button>
       <div id="myDropdown" class="dropdown-content">
-        <a href="#" onclick="switchView('debts')">📝 Diiwaanka Deymaha</a>
-        <a href="#" onclick="switchView('amaanada')">💵 Amaanada (MSM)</a>
-        <a href="#" onclick="switchView('macaamiisha')">👥 Qaybta Macaamiisha</a>
-        <a href="#" onclick="logoutAdmin()" style="color:#dc3545;">🔒 Ka Bax Maamulka (Lock)</a>
+        <a href="#" onclick="switchView('debts')">📝 Debts</a>
+        <a href="#" onclick="switchView('amaanada')">💵 Deposit (Amaano)</a>
+        <a href="#" onclick="switchView('macaamiisha')">👥 Customers</a>
+        <a href="#" onclick="logoutAdmin()" style="color:#dc3545;">🔒 LOGOUT</a>
       </div>
     </div>
     <div id="merchantTitle" class="merchant-title-style">DebtWatcher</div>
   </div>
 
-  <!-- SECTION 1: DEYMAHA -->
+  <!-- SECTION 1: DEBTS -->
   <div id="viewDebtsSection">
     <div class="section-badge-header">
-      <span>📝 Diiwaanka Deymaha</span>
-      <span style="font-size:12px;">Macaamiisha: <b id="countDebts">0</b></span>
+      <span>📝 Debt Register</span>
+      <span>Total: <span class="count-pill" id="countDebts">0</span></span>
     </div>
+    
     <div class="app-content-grid">
       <div class="input-group">
-        <h4 style="color:var(--accent-color);">Diiwaangeli Macmiil Deyn</h4>
-        <input type="text" id="cName" placeholder="Magaca Macmiilka">
-        <input type="number" id="cPhone" placeholder="Telefanka">
+        <h4 style="color:var(--accent-color);">Macmiil cusub kudar</h4>
+        <input type="text" id="cName" placeholder="Customer Name">
+        <input type="number" id="cPhone" placeholder="Phone">
         <input type="number" id="cPin" placeholder="PIN (Default: 1234)">
-        <button onclick="addC()" class="btn-success">Kudari Macmiil Deyn</button>
+        <button onclick="addC()" class="btn-success">ADD CUSTOMER</button>
       </div>
+
       <div>
-        <input type="text" id="sBar" placeholder="Raadi macmiil..." oninput="render()" style="margin-bottom:8px;">
+        <input type="text" id="sBar" placeholder="Search debt customer..." oninput="render()" style="margin-bottom:8px;">
         <div id="area" style="max-height: 350px; overflow-y: auto;"></div>
-        <div id="tGuud" class="total-box">Total Deyn: $0.00</div>
+        <div id="tGuud" class="total-box">Total Debt: $0.00</div>
       </div>
     </div>
   </div>
 
   <!-- SECTION 2: AMAANADA -->
   <div id="viewAmaanadaSection" class="hidden-section">
-    <div id="amaanoMainPage">
-      <div class="section-badge-header" style="background: rgba(40,167,69,0.1); color: #28a745; justify-content: center;">
-        <span>Macaamiisha: <b id="countAmaanada">0</b></span>
+    <div class="section-badge-header" style="background: linear-gradient(135deg, #1e7e34, #28a745);">
+      <span>💵 Deposit Register</span>
+      <span>Total: <span class="count-pill" style="color: #1e7e34;" id="countAmaanada">0</span></span>
+    </div>
+
+    <div class="app-content-grid">
+      <div class="input-group" style="border-left: 4px solid #28a745;">
+        <h4 style="color:#28a745;">Macmiil cusub kudar</h4>
+        <input type="text" id="amName" placeholder="Customer Name">
+        <input type="number" id="amPhone" placeholder="Phone">
+        <input type="number" id="amPin" placeholder="PIN (Default: 1234)">
+        <button onclick="addAmaanoClient()" class="btn-success" style="background:#28a745;">ADD DEPOSIT</button>
       </div>
-      <div class="app-content-grid">
-        <div class="input-group" style="border-left: 4px solid #28a745;">
-          <h4 style="color:#28a745;">Diiwaangeli Amaano Cusub</h4>
-          <input type="text" id="amName" placeholder="Magaca Macmiilka Amaanada">
-          <input type="number" id="amPhone" placeholder="Telefanka">
-          <input type="number" id="amPin" placeholder="PIN (Default: 1234)">
-          <button onclick="addAmaanoClient()" class="btn-success" style="background:#28a745;">Kudari Amaano</button>
-        </div>
-        <div>
-          <div id="amaanadaList" style="max-height: 350px; overflow-y: auto;"></div>
-          <div id="tAmaanoGuud" class="total-box" style="color:#28a745;">Total Amaano: $0.00</div>
-        </div>
+
+      <div>
+        <input type="text" id="sBarAmaano" placeholder="Search deposit customer..." oninput="renderAmaanada()" style="margin-bottom:8px;">
+        <div id="amaanadaList" style="max-height: 350px; overflow-y: auto;"></div>
+        <div id="tAmaanoGuud" class="total-box" style="color:#28a745;">Total Deposit: $0.00</div>
       </div>
     </div>
   </div>
 
-  <!-- SECTION 3: MACAAMIISHA GRID -->
+  <!-- SECTION 3: ALL CUSTOMERS GRID -->
   <div id="viewMacaamiishaSection" class="hidden-section">
-    <div class="section-badge-header" style="background: rgba(255,193,7,0.15); color: #856404;">
-      <span>👥 Dhamaan Macaamiisha</span>
+    <div class="section-badge-header" style="background: linear-gradient(135deg, #d39e00, #ffc107); color: #000;">
+      <span>👥 All Customers</span>
     </div>
-    <div id="macaamiishaGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px;"></div>
+    <input type="text" id="sBarMacaamiil" placeholder="Search customer..." oninput="renderMacaamiishaGrid()" style="margin-bottom:12px;">
+    <div id="macaamiishaGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px;"></div>
   </div>
 
   <div class="theme-font-section">
     <div class="sub-btn-group">
       <span style="font-size:11px; font-weight:bold;">Theme:</span>
       <div class="mini-btn-grid">
-        <button class="theme-btn active" id="btnThemeLight" onclick="changeTheme('light', event)">Light</button>
-        <button class="theme-btn" id="btnThemeDark" onclick="changeTheme('dark', event)">Dark</button>
+        <button class="theme-btn active" id="btnThemeLight" onclick="changeTheme('light', event)">LIGHT</button>
+        <button class="theme-btn" id="btnThemeDark" onclick="changeTheme('dark', event)">DARK</button>
       </div>
     </div>
     <div class="sub-btn-group">
       <span style="font-size:11px; font-weight:bold;">Font Size:</span>
-      <div class="mini-dir-grid mini-btn-grid-three">
-        <button class="font-btn" onclick="changeFont('small', event)">S</button>
-        <button class="font-btn active" onclick="changeFont('medium', event)">M</button>
-        <button class="font-btn" onclick="changeFont('large', event)">L</button>
+      <div class="mini-btn-grid-three">
+        <button class="font-btn" onclick="changeFont('13px', event)">S</button>
+        <button class="font-btn active" onclick="changeFont('15px', event)">M</button>
+        <button class="font-btn" onclick="changeFont('17px', event)">L</button>
       </div>
     </div>
   </div>
 </div>
 
 <script>
+const SCRIPT_URL = "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE"; 
+
 let clients = [];       
 let amaanoClients = []; 
 let activeClientIndex = null;
+let activeClientType = 'debt';
 
 window.onload = function() {
+  checkSubscriptionAndLockout();
   let pass = localStorage.getItem("dukaan_password") || "Hanti@2026";
   loadStoreData(pass);
-  
-  // Hubi haddii URL-ka uusan wadan awood maamule, ha furin dashboard-ka marnaba
-  let urlParams = new URLSearchParams(window.location.search);
-  let mode = urlParams.get('mode');
 
-  if (mode === 'admin') {
-    // Hadii adiga gaar ahaan aad isticmaalayso link ku xiran ?mode=admin, kaliya codso baasawar
-    document.getElementById("customerPortal").style.display = "flex";
-  } else {
-    // Si caadi ah qof walba wuxuu ku dhacayaa Portal-ka macmiilka oo xiran
-    document.getElementById("customerPortal").style.display = "flex";
-    document.getElementById("mainApp").style.display = "none";
-  }
+  document.getElementById("customerPortal").style.display = "flex";
+  document.getElementById("mainApp").style.display = "none";
 };
+
+function checkSubscriptionAndLockout() {
+  let today = new Date();
+  let dayOfMonth = today.getDate();
+  let isLocked = localStorage.getItem("app_is_locked") === "true";
+
+  if (isLocked) {
+    document.getElementById("appLockoutOverlay").style.display = "flex";
+    return;
+  }
+
+  if (dayOfMonth >= 28) {
+    document.getElementById("warningBanner28").style.display = "block";
+  } else {
+    document.getElementById("warningBanner28").style.display = "none";
+  }
+}
+
+function unlockAppWithCode() {
+  let code = document.getElementById("activationCodeInput").value.trim();
+  if (code === "PAID2026" || code === "82501951") {
+    localStorage.setItem("app_is_locked", "false");
+    document.getElementById("appLockoutOverlay").style.display = "none";
+    alert("✅ App unlocked!");
+  } else {
+    alert("❌ Invalid code!");
+  }
+}
 
 function loadStoreData(passKey) {
   localStorage.setItem("dukaan_password", passKey);
-  clients = JSON.parse(localStorage.getItem("DATA_DEBTS_" + passKey)) || [];
-  amaanoClients = JSON.parse(localStorage.getItem("DATA_AMAANO_" + passKey)) || [];
+  try { clients = JSON.parse(localStorage.getItem("DATA_DEBTS_" + passKey)) || []; } catch(e) { clients = []; }
+  try { amaanoClients = JSON.parse(localStorage.getItem("DATA_AMAANO_" + passKey)) || []; } catch(e) { amaanoClients = []; }
+}
+
+function save() { 
+  let pass = localStorage.getItem("dukaan_password") || "Hanti@2026";
+  localStorage.setItem("DATA_DEBTS_" + pass, JSON.stringify(clients)); 
+  localStorage.setItem("DATA_AMAANO_" + pass, JSON.stringify(amaanoClients)); 
+  
+  if (SCRIPT_URL && SCRIPT_URL !== "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE") {
+    fetch(SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ pass: pass, debts: clients, amaano: amaanoClients })
+    }).catch(err => console.log("Cloud sync delayed"));
+  }
+
+  render();
+  renderAmaanada();
+  renderMacaamiishaGrid();
+}
+
+function filterClients(list, query) {
+  let q = (query || "").toLowerCase().trim();
+  if (!q) return list;
+  return list.filter(c => (c.name || "").toLowerCase().includes(q) || String(c.phone || "").includes(q));
 }
 
 function showAdminLogin() {
-  // Hubi inuu sanduuqa baasawarku mar walba madhan yahay marka la furo
   document.getElementById("dynamicPasswordInput").value = "";
   document.getElementById("dynamicLoginError").style.display = "none";
   document.getElementById("dynamicLoginOverlay").style.display = "flex";
@@ -302,8 +453,9 @@ function checkDynamicPassword() {
     document.getElementById("mainApp").style.display = "block";
     render();
     renderAmaanada();
+    renderMacaamiishaGrid();
   } else {
-    document.getElementById("dynamicLoginErrorമായി" || "dynamicLoginError").innerText = "❌ Baasaward-ka Maamulka waa khalad!";
+    document.getElementById("dynamicLoginError").innerText = "❌ Incorrect Password!";
     document.getElementById("dynamicLoginError").style.display = "block";
   }
 }
@@ -313,123 +465,299 @@ function logoutAdmin() {
   document.getElementById("customerPortal").style.display = "flex";
   document.getElementById("custPinInput").value = "";
   document.getElementById("custResultArea").style.display = "none";
-  document.getElementById("dynamicPasswordInput").value = "";
+  document.getElementById("custAuthForm").style.display = "block";
 }
 
 function accessCustomerFiles() {
   let enteredPin = document.getElementById("custPinInput").value.trim();
   let resultArea = document.getElementById("custResultArea");
+  let histArea = document.getElementById("portalClientHistory");
+  let badge = document.getElementById("portalAccountBadge");
   
-  if (enteredPin === "") { alert("Fadlan geli PIN-ka!"); return; }
+  if (!enteredPin) { alert("Please enter PIN!"); return; }
 
-  let foundClient = [...clients, ...amaanoClients].find(c => c.pin === enteredPin);
-  
+  let foundDebt = clients.find(c => String(c.pin) === String(enteredPin));
+  let foundAmaano = amaanoClients.find(c => String(c.pin) === String(enteredPin));
+  let foundClient = foundDebt || foundAmaano;
+
   if (foundClient) {
+    document.getElementById("custAuthForm").style.display = "none";
     document.getElementById("portalClientTitle").innerText = "👤 " + foundClient.name;
-    document.getElementById("portalClientBal").innerText = "Baaqigaaga waa: $" + foundClient.bal.toFixed(2);
-  } else {
-    document.getElementById("portalClientTitle").innerText = "👤 Macmiil Cusub";
-    document.getElementById("portalClientBal").innerText = "Diiwaangeli faylkaaga gaarka ah";
-  }
+    let bal = Number(foundClient.bal) || 0;
+    document.getElementById("portalClientBal").innerText = "Balance: $" + bal.toFixed(2);
+    
+    if (foundAmaano) {
+      badge.className = "badge-tag badge-amaano"; badge.innerText = "Amaano";
+      document.getElementById("portalClientBal").style.color = "#28a745";
+    } else {
+      badge.className = "badge-tag badge-deyn"; badge.innerText = "Deyn";
+      document.getElementById("portalClientBal").style.color = "#dc3545";
+    }
 
-  resultArea.style.display = "block";
+    histArea.innerHTML = "";
+    if (!foundClient.hist || foundClient.hist.length === 0) {
+      histArea.innerHTML = "<p style='font-size:12px; color:#888; text-align:center;'>No history found.</p>";
+    } else {
+      foundClient.hist.forEach(tx => {
+        let sign = tx.type === 'kudalacag' ? '+' : '-';
+        let color = tx.type === 'kudalacag' ? '#28a745' : '#dc3545';
+        histArea.innerHTML += `
+          <div style="font-size:12px; border-bottom:1px solid #ddd; padding:5px 0;">
+            <div style="display:flex; justify-content:space-between;">
+              <b>${tx.note}</b>
+              <span style="color:${color}; font-weight:bold;">${sign}$${Number(tx.amount).toFixed(2)}</span>
+            </div>
+            <small style="color:#777;">${tx.date}</small>
+          </div>
+        `;
+      });
+    }
+    resultArea.style.display = "block";
+  } else {
+    alert("PIN not registered!");
+  }
 }
 
-function addClientFromPortal() {
-  let name = document.getElementById("pCustName").value.trim();
-  let phone = document.getElementById("pCustPhone").value.trim();
-  let pin = document.getElementById("pCustPin").value.trim() || "1234";
+function resetPortalView() {
+  document.getElementById("custResultArea").style.display = "none";
+  document.getElementById("custAuthForm").style.display = "block";
+  document.getElementById("custPinInput").value = "";
+}
 
-  if (!name || !phone) { alert("Fadlan buuxi Magaca iyo Telefanka!"); return; }
+function addC() {
+  let name = document.getElementById("cName").value.trim();
+  let phone = document.getElementById("cPhone").value.trim();
+  let pin = document.getElementById("cPin").value.trim() || "1234";
 
-  clients.push({ name: name, phone: phone, pin: pin, bal: 0, hist: [] });
+  if (!name || !phone) { alert("Please enter name and phone!"); return; }
+
+  clients.unshift({ name: name, phone: phone, pin: pin, bal: 0, hist: [] });
   save();
 
-  alert("✅ Macmiilka " + name + " si guul leh ayaa loo diiwaangeliyay!");
-  document.getElementById("pCustName").value = "";
-  document.getElementById("pCustPhone").value = "";
-  document.getElementById("pCustPin").value = "";
+  document.getElementById("cName").value = "";
+  document.getElementById("cPhone").value = "";
+  document.getElementById("cPin").value = "";
 }
 
-function save() { 
-  let pass = localStorage.getItem("dukaan_password") || "Hanti@2026";
-  localStorage.setItem("DATA_DEBTS_" + pass, JSON.stringify(clients)); 
-  localStorage.setItem("DATA_AMAANO_" + pass, JSON.stringify(amaanoClients)); 
+function addAmaanoClient() {
+  let name = document.getElementById("amName").value.trim();
+  let phone = document.getElementById("amPhone").value.trim();
+  let pin = document.getElementById("amPin").value.trim() || "1234";
+
+  if (!name || !phone) { alert("Please enter name and phone!"); return; }
+
+  amaanoClients.unshift({ name: name, phone: phone, pin: pin, bal: 0, hist: [] });
+  save();
+
+  document.getElementById("amName").value = "";
+  document.getElementById("amPhone").value = "";
+  document.getElementById("amPin").value = "";
 }
 
-function toggleMenu() { document.getElementById("myDropdown").classList.toggle("show-dropdown"); }
+function deleteCustomer(index, category) {
+  let targetList = category === 'debt' ? clients : amaanoClients;
+  let customer = targetList[index];
+  if (!customer) return;
 
-function switchView(viewName) {
-  document.getElementById("viewDebtsSection").classList.add("hidden-section");
-  document.getElementById("viewAmaanadaSection").classList.add("hidden-section");
-  document.getElementById("viewMacaamiishaSection").classList.add("hidden-section");
+  if (confirm(`Ma ziadaa rabtaa inaad tirto macmiilka "${customer.name}"?`)) {
+    targetList.splice(index, 1);
+    save();
+  }
+}
 
-  if (viewName === 'debts') { document.getElementById("viewDebtsSection").classList.remove("hidden-section"); render(); }
-  else if (viewName === 'amaanada') { document.getElementById("viewAmaanadaSection").classList.remove("hidden-section"); renderAmaanada(); }
-  else if (viewName === 'macaamiisha') { document.getElementById("viewMacaamiishaSection").classList.remove("hidden-section"); renderMacaamiishaGrid(); }
+function processTransaction(index, category, actionType) {
+  let targetList = category === 'debt' ? clients : amaanoClients;
+  let customer = targetList[index];
+  if (!customer) return;
+
+  let promptTitle = category === 'debt' 
+    ? (actionType === 'kudalacag' ? "Enter debt amount:" : "Enter paid debt amount:")
+    : (actionType === 'kudalacag' ? "Enter deposit amount:" : "Enter returned deposit amount:");
+
+  let amountStr = prompt(promptTitle);
+  if (!amountStr) return;
+
+  let amount = parseFloat(amountStr);
+  if (isNaN(amount) || amount <= 0) { alert("Enter a valid amount!"); return; }
+
+  let note = prompt("Note:", actionType === 'kudalacag' ? "Add" : "Pay");
+  if (!note || note.trim() === "") note = actionType === 'kudalacag' ? "Add" : "Pay";
+
+  if (!customer.hist) customer.hist = [];
+
+  if (actionType === 'kudalacag') { customer.bal = (Number(customer.bal) || 0) + amount; } 
+  else { customer.bal = (Number(customer.bal) || 0) - amount; }
+
+  customer.hist.unshift({
+    type: actionType,
+    amount: amount,
+    note: note.trim(),
+    date: new Date().toLocaleString('so-SO', { hour12: true })
+  });
+
+  save();
 }
 
 function render() {
   let area = document.getElementById("area");
-  let searchVal = document.getElementById("sBar").value.toLowerCase().trim();
-  area.innerHTML = "";
-  let totalGuud = 0;
-  document.getElementById("countDebts").innerText = clients.length;
+  let sVal = document.getElementById("sBar") ? document.getElementById("sBar").value : "";
+  if (!area) return;
 
-  clients.filter(c => c.name.toLowerCase().includes(searchVal) || c.phone.includes(searchVal)).forEach((c, idx) => {
-    totalGuud += c.bal;
+  area.innerHTML = "";
+  let totalDeyn = 0;
+  let filtered = filterClients(clients, sVal);
+  document.getElementById("countDebts").innerText = filtered.length;
+
+  filtered.forEach((c) => {
+    let originalIndex = clients.indexOf(c);
+    let bal = Number(c.bal) || 0;
+    totalDeyn += bal;
+
     let row = document.createElement("div");
     row.className = "customer-row";
-    row.onclick = () => openDetailsModal(idx);
-    row.innerHTML = `<div class="customer-info-left"><span class="customer-name-text">${c.name}</span><span class="customer-phone-text">📞 ${c.phone}</span></div><div class="customer-balance-right">$${c.bal.toFixed(2)}</div>`;
+    row.innerHTML = `
+      <div class="customer-row-top">
+        <div class="customer-info-left">
+          <span class="customer-name-text">${c.name}</span>
+          <span class="customer-phone-text">📞 ${c.phone} | PIN: ${c.pin}</span>
+        </div>
+        <div class="customer-balance-right">$${bal.toFixed(2)}</div>
+      </div>
+      <div class="action-btn-row">
+        <button class="btn-success" onclick="processTransaction(${originalIndex}, 'debt', 'kudalacag')">+ ADD DEBT</button>
+        <button class="btn-warning" onclick="processTransaction(${originalIndex}, 'debt', 'bixi')">- PAY DEBT</button>
+        <button onclick="openDetailsModal(${originalIndex}, 'debt')">VIEW / INVOICE</button>
+        <button class="btn-danger" onclick="deleteCustomer(${originalIndex}, 'debt')">DELETE</button>
+      </div>
+    `;
     area.appendChild(row);
   });
-  document.getElementById("tGuud").innerText = "Total Deyn: $" + totalGuud.toFixed(2);
-}
 
-function addC() {
-  let n = document.getElementById("cName").value.trim();
-  let p = document.getElementById("cPhone").value.trim();
-  let pin = document.getElementById("cPin").value.trim() || "1234";
-  if(!n || !p) return;
-  clients.push({ name: n, phone: p, pin: pin, bal: 0, hist: [] });
-  document.getElementById("cName").value = ""; document.getElementById("cPhone").value = ""; document.getElementById("cPin").value = "";
-  save(); render();
+  document.getElementById("tGuud").innerText = "Total Debt: $" + totalDeyn.toFixed(2);
 }
 
 function renderAmaanada() {
-  const container = document.getElementById("amaanadaList");
-  document.getElementById("countAmaanada").innerText = amaanoClients.length;
-  container.innerHTML = "";
-  let total = 0;
-  amaanoClients.forEach((c) => {
-    total += c.bal;
-    let cardBtn = document.createElement("div");
-    cardBtn.className = "amaano-card-btn";
-    cardBtn.innerHTML = `<div class="customer-info-left"><span class="customer-name-text">📄 ${c.name}</span><span class="customer-phone-text">📞 ${c.phone}</span></div><div class="customer-balance-right" style="color:#28a745;">$${c.bal.toFixed(2)}</div>`;
-    container.appendChild(cardBtn);
+  let list = document.getElementById("amaanadaList");
+  let sVal = document.getElementById("sBarAmaano") ? document.getElementById("sBarAmaano").value : "";
+  if (!list) return;
+
+  list.innerHTML = "";
+  let totalAmaano = 0;
+  let filtered = filterClients(amaanoClients, sVal);
+  document.getElementById("countAmaanada").innerText = filtered.length;
+
+  filtered.forEach((c) => {
+    let originalIndex = amaanoClients.indexOf(c);
+    let bal = Number(c.bal) || 0;
+    totalAmaano += bal;
+
+    let card = document.createElement("div");
+    card.className = "amaano-card-btn";
+    card.innerHTML = `
+      <div class="customer-row-top">
+        <div class="customer-info-left">
+          <span class="customer-name-text">${c.name}</span>
+          <span class="customer-phone-text">📞 ${c.phone} | PIN: ${c.pin}</span>
+        </div>
+        <div class="customer-balance-right" style="color:#28a745;">$${bal.toFixed(2)}</div>
+      </div>
+      <div class="action-btn-row">
+        <button class="btn-success" style="background:#28a745;" onclick="processTransaction(${originalIndex}, 'amaano', 'kudalacag')">+ ADD DEPOSIT</button>
+        <button class="btn-warning" onclick="processTransaction(${originalIndex}, 'amaano', 'bixi')">- WITHDRAW</button>
+        <button onclick="openDetailsModal(${originalIndex}, 'amaano')">VIEW / INVOICE</button>
+        <button class="btn-danger" onclick="deleteCustomer(${originalIndex}, 'amaano')">DELETE</button>
+      </div>
+    `;
+    list.appendChild(card);
   });
-  document.getElementById("tAmaanoGuud").innerText = "Total Amaano: $" + total.toFixed(2);
+
+  document.getElementById("tAmaanoGuud").innerText = "Total Deposit: $" + totalAmaano.toFixed(2);
 }
 
 function renderMacaamiishaGrid() {
-  const grid = document.getElementById("macaamiishaGrid");
+  let grid = document.getElementById("macaamiishaGrid");
+  let sVal = document.getElementById("sBarMacaamiil") ? document.getElementById("sBarMacaamiil").value : "";
+  if (!grid) return;
   grid.innerHTML = "";
-  [...clients, ...amaanoClients].forEach((c) => {
+
+  let combined = [];
+  (clients || []).forEach((c, idx) => combined.push({...c, category: 'debt', origIndex: idx}));
+  (amaanoClients || []).forEach((c, idx) => combined.push({...c, category: 'amaano', origIndex: idx}));
+
+  let filtered = filterClients(combined, sVal);
+
+  if (filtered.length === 0) {
+    grid.innerHTML = "<p style='color:#777; grid-column: 1/-1; text-align:center; padding: 20px;'>No customers found.</p>";
+    return;
+  }
+
+  filtered.forEach((c) => {
     let card = document.createElement("div");
-    card.style.cssText = "background:rgba(0,0,0,0.03); padding:10px; border-radius:6px; border:1px solid var(--border-color);";
-    card.innerHTML = `<b>${c.name}</b><br><small>📞 ${c.phone}</small><br><b>$${c.bal.toFixed(2)}</b>`;
+    let isDebt = c.category === 'debt';
+    let bal = Number(c.bal) || 0;
+    card.style = "background: var(--container-bg); border: 1px solid var(--border-color); border-radius: 6px; padding: 12px; text-align: left; display:flex; flex-direction:column; justify-content:space-between;";
+    card.innerHTML = `
+      <div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px;">
+          <strong style="color: var(--accent-color); font-size:15px;">${c.name}</strong>
+          <span class="badge-tag ${isDebt ? 'badge-deyn' : 'badge-amaano'}">${isDebt ? 'Deyn' : 'Amaano'}</span>
+        </div>
+        <div style="font-size:12px; color:#666;">📞 ${c.phone} | PIN: ${c.pin}</div>
+        <div style="font-size:16px; font-weight: bold; margin-top: 8px; color: ${isDebt ? '#dc3545' : '#28a745'};">
+          Balance: $${bal.toFixed(2)}
+        </div>
+      </div>
+      <div style="display:flex; gap:4px; margin-top:10px;">
+        <button onclick="openDetailsModal(${c.origIndex}, '${c.category}')" style="flex:2; font-size:12px; padding:6px;">VIEW</button>
+        <button class="btn-danger" onclick="deleteCustomer(${c.origIndex}, '${c.category}')" style="flex:1; font-size:12px; padding:6px;">DELETE</button>
+      </div>
+    `;
     grid.appendChild(card);
   });
 }
 
-function openDetailsModal(i) {
-  activeClientIndex = i;
-  let c = clients[i];
-  document.getElementById("modalClientName").innerText = "👤 " + c.name;
-  document.getElementById("modalClientPhone").innerText = c.phone;
-  document.getElementById("modalClientPin").innerText = c.pin || '1234';
-  document.getElementById("modalClientBalance").innerText = "$" + c.bal.toFixed(2);
+function openDetailsModal(index, category) {
+  activeClientIndex = index;
+  activeClientType = category;
+
+  let targetList = category === 'debt' ? clients : amaanoClients;
+  let customer = targetList[index];
+  if (!customer) return;
+
+  let badge = document.getElementById("modalTypeBadge");
+  let boonaHeader = document.getElementById("boonaHeaderTitle");
+  let boonaBtn = document.getElementById("addBoonaBtn");
+
+  if (category === 'debt') {
+    badge.className = "badge-tag badge-deyn"; badge.innerText = "Deyn";
+    boonaHeader.innerText = "📦 Invoice Item (Add Debt)";
+    boonaBtn.innerText = "ADD TO DEBT"; boonaBtn.className = "btn-danger";
+  } else {
+    badge.className = "badge-tag badge-amaano"; badge.innerText = "Amaano";
+    boonaHeader.innerText = "📦 Invoice Item (Deduct Deposit)";
+    boonaBtn.innerText = "DEDUCT FROM DEPOSIT"; boonaBtn.className = "btn-success";
+  }
+
+  let bal = Number(customer.bal) || 0;
+  document.getElementById("modalClientName").innerText = "👤 " + customer.name;
+  document.getElementById("modalClientPhone").innerText = customer.phone;
+  document.getElementById("modalClientPin").innerText = customer.pin;
+  document.getElementById("modalClientBalance").innerText = "$" + bal.toFixed(2);
+  document.getElementById("modalClientBalance").style.color = category === 'debt' ? '#dc3545' : '#28a745';
+
+  let histArea = document.getElementById("modalHistoryArea");
+  histArea.innerHTML = "<h4>📜 History:</h4>";
+  if (!customer.hist || customer.hist.length === 0) {
+    histArea.innerHTML += "<p style='font-size:12px; color:#888;'>No history.</p>";
+  } else {
+    customer.hist.forEach(tx => {
+      let sign = tx.type === 'kudalacag' ? '+' : '-';
+      histArea.innerHTML += `<div style="font-size:12px; border-bottom:1px solid #ddd; padding:5px 0;">
+        <b>${sign} $${Number(tx.amount).toFixed(2)}</b> - ${tx.note} <br><small style="color:#777;">${tx.date}</small>
+      </div>`;
+    });
+  }
+
   document.getElementById("drawerOverlay").classList.add("active");
   document.getElementById("detailsDrawer").classList.add("open");
 }
@@ -439,12 +767,72 @@ function closeDetailsModal() {
   document.getElementById("detailsDrawer").classList.remove("open");
 }
 
-function changeTheme(theme, event) { document.body.className = theme + '-theme'; }
-function changeFont(size, event) {
-  const root = document.documentElement;
-  if (size === 'small') root.style.setProperty('--main-font', '12px');
-  else if (size === 'medium') root.style.setProperty('--main-font', '15px');
-  else if (size === 'large') root.style.setProperty('--main-font', '18px');
+function addInvoiceItem() {
+  if (activeClientIndex === null) return;
+  let desc = document.getElementById("invDesc").value.trim();
+  let qty = parseFloat(document.getElementById("invQty").value) || 1;
+  let price = parseFloat(document.getElementById("invPrice").value) || 0;
+
+  if (!desc || price <= 0) { alert("Fill item details!"); return; }
+
+  let totalAmount = qty * price;
+  let targetList = activeClientType === 'debt' ? clients : amaanoClients;
+  let customer = targetList[activeClientIndex];
+  if (!customer) return;
+
+  if (!customer.hist) customer.hist = [];
+
+  if (activeClientType === 'debt') {
+    customer.bal = (Number(customer.bal) || 0) + totalAmount;
+    customer.hist.unshift({
+      type: 'kudalacag', amount: totalAmount,
+      note: `Invoice: ${desc} (${qty} x $${price.toFixed(2)})`,
+      date: new Date().toLocaleString('so-SO', { hour12: true })
+    });
+  } else {
+    customer.bal = (Number(customer.bal) || 0) - totalAmount;
+    customer.hist.unshift({
+      type: 'bixi', amount: totalAmount,
+      note: `Invoice: ${desc} (${qty} x $${price.toFixed(2)})`,
+      date: new Date().toLocaleString('so-SO', { hour12: true })
+    });
+  }
+
+  save();
+  document.getElementById("invDesc").value = "";
+  document.getElementById("invQty").value = "1";
+  document.getElementById("invPrice").value = "0.00";
+  openDetailsModal(activeClientIndex, activeClientType);
+  alert("✅ Item added!");
+}
+
+function toggleMenu() { document.getElementById("myDropdown").classList.toggle("show-dropdown"); }
+
+function switchView(viewName) {
+  document.getElementById("myDropdown").classList.remove("show-dropdown");
+  document.getElementById("viewDebtsSection").classList.add("hidden-section");
+  document.getElementById("viewAmaanadaSection").classList.add("hidden-section");
+  document.getElementById("viewMacaamiishaSection").classList.add("hidden-section");
+
+  if (viewName === 'debts') { document.getElementById("viewDebtsSection").classList.remove("hidden-section"); render(); }
+  else if (viewName === 'amaanada') { document.getElementById("viewAmaanadaSection").classList.remove("hidden-section"); renderAmaanada(); }
+  else if (viewName === 'macaamiisha') { document.getElementById("viewMacaamiishaSection").classList.remove("hidden-section"); renderMacaamiishaGrid(); }
+}
+
+function changeTheme(theme, e) {
+  if (e) {
+    document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
+    e.target.classList.add('active');
+  }
+  document.body.className = theme === 'dark' ? 'dark-theme' : 'light-theme';
+}
+
+function changeFont(size, e) {
+  if (e) {
+    document.querySelectorAll('.font-btn').forEach(btn => btn.classList.remove('active'));
+    e.target.classList.add('active');
+  }
+  document.documentElement.style.setProperty('--main-font', size);
 }
 </script>
 </body>
