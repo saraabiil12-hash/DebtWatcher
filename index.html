@@ -834,6 +834,13 @@ function changeFont(size, e) {
   }
   document.documentElement.style.setProperty('--main-font', size);
 }
-</script>
+function changeStore(storeName) {
+  loadStoreData(storeName);
+  render();
+  renderAmaanada();
+  renderMacaamiishaGrid();
+  populateInvoiceSelect();
+  alert("🟢 Waxaa loo badalay: " + storeName);
+  }</script>
 </body>
 </html>
