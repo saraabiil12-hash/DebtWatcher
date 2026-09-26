@@ -4,7 +4,7 @@
 <link rel="manifest" href="manifest.json">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DebtWatcher</title>
+<title>HantiMaamul</title>
 <style>
 :root {
   --bg-color: #f4f6f9;
@@ -46,7 +46,33 @@ body { background-color: var(--bg-color); color: var(--text-color); font-size: v
   position: relative;
 }
 
-/* HEADER BULUUG AH OO CASRI AH */
+/* OVERLAY MODALS */
+.overlay-card {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+}
+
+.card-content { 
+  background: var(--container-bg); 
+  padding: 20px; 
+  border-radius: 10px; 
+  width: 100%; 
+  max-width: 480px; 
+  text-align: center; 
+  border: 1px solid var(--border-color); 
+  max-height: 90vh; 
+  overflow-y: auto; 
+  color: var(--text-color);
+}
+
+/* HEADER */
 .app-header { 
   display: flex; 
   justify-content: space-between; 
@@ -56,13 +82,14 @@ body { background-color: var(--bg-color); color: var(--text-color); font-size: v
   border-radius: 8px; 
   margin-bottom: 15px; 
   box-shadow: 0 4px 10px rgba(0, 123, 255, 0.25);
+  position: relative;
+  z-index: 100;
 }
 
 .merchant-title-style { 
   font-weight: bold; 
-  font-size: 22px; 
+  font-size: 20px; 
   color: #ffffff; 
-  letter-spacing: 0.5px;
 }
 
 .menu-dropdown { position: relative; display: inline-block; }
@@ -71,25 +98,40 @@ body { background-color: var(--bg-color); color: var(--text-color); font-size: v
   background: rgba(255, 255, 255, 0.2); 
   color: #ffffff; 
   padding: 8px 16px; 
-  font-size: 15px; 
+  font-size: 14px; 
   border: 1px solid rgba(255, 255, 255, 0.4); 
   border-radius: 6px; 
   cursor: pointer; 
   font-weight: bold; 
-  backdrop-filter: blur(5px);
-  transition: background 0.2s;
 }
 
-.menu-btn:hover { background: rgba(255, 255, 255, 0.35); }
+.dropdown-content { 
+  display: none; 
+  position: absolute; 
+  left: 0; 
+  top: 45px; 
+  background-color: var(--container-bg); 
+  min-width: 220px; 
+  box-shadow: 0px 8px 16px rgba(0,0,0,0.2); 
+  z-index: 1000; 
+  border-radius: 6px; 
+  border: 1px solid var(--border-color); 
+  overflow: hidden; 
+}
 
-.dropdown-content { display: none; position: absolute; left: 0; top: 45px; background-color: var(--container-bg); min-width: 220px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1000; border-radius: 6px; border: 1px solid var(--border-color); overflow: hidden; }
-.dropdown-content a { color: var(--text-color); padding: 12px 16px; text-decoration: none; display: block; font-weight: bold; font-size: 14px; border-bottom: 1px solid var(--border-color); }
+.dropdown-content a { 
+  color: var(--text-color); 
+  padding: 12px 16px; 
+  text-decoration: none; 
+  display: block; 
+  font-weight: bold; 
+  font-size: 14px; 
+  border-bottom: 1px solid var(--border-color); 
+}
+
 .dropdown-content a:hover { background-color: rgba(0,123,255,0.1); }
-.show-dropdown { display: block; }
+.show-dropdown { display: block !important; }
 
-.app-content-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
-
-/* BAR-KA MAAMULKA / BADGE-KA BULUUGGA AH */
 .section-badge-header { 
   display: flex; 
   justify-content: space-between; 
@@ -100,10 +142,8 @@ body { background-color: var(--bg-color); color: var(--text-color); font-size: v
   border-radius: 6px; 
   margin-bottom: 15px; 
   font-weight: bold; 
-  box-shadow: 0 2px 6px rgba(0,123,255,0.2);
 }
 
-.section-badge-header span { font-size: 15px; }
 .section-badge-header .count-pill { 
   background: #ffffff; 
   color: #0056b3; 
@@ -113,10 +153,10 @@ body { background-color: var(--bg-color); color: var(--text-color); font-size: v
   font-weight: bold; 
 }
 
-.input-group { display: flex; flex-direction: column; gap: 10px; background: rgba(0,0,0,0.02); padding: 14px; border-radius: 6px; border: 1px solid var(--border-color); margin-bottom: 12px; }
+.input-group { display: flex; flex-direction: column; gap: 10px; background: rgba(0,0,0,0.02); padding: 14px; border-radius: 6px; border: 1px solid var(--border-color); margin-bottom: 12px; text-align: left; }
 
-input { width: 100%; padding: 10px; border-radius: 5px; border: 1px solid var(--border-color); background: #fff; color: #333; font-size: 14px; }
-.dark-theme input { background: #2a2a2a; color: #fff; }
+input, select { width: 100%; padding: 10px; border-radius: 5px; border: 1px solid var(--border-color); background: #fff; color: #333; font-size: 14px; }
+.dark-theme input, .dark-theme select { background: #2a2a2a; color: #fff; }
 
 button { padding: 10px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 14px; background: var(--accent-color); color: #fff; }
 .btn-danger { background: #dc3545; color: #fff; }
@@ -135,18 +175,15 @@ button { padding: 10px; border: none; border-radius: 5px; font-weight: bold; cur
 .total-box { font-size: 18px; font-weight: bold; text-align: center; margin-top: 10px; padding: 10px; background: #e9ecef; border-radius: 5px; color: var(--accent-color); }
 .dark-theme .total-box { background: #2b2b2b; }
 
-.overlay-card { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: flex; justify-content: center; align-items: center; z-index: 9999; padding: 15px; }
-.card-content { background: var(--container-bg); padding: 20px; border-radius: 10px; width: 100%; max-width: 450px; text-align: center; border: 1px solid var(--border-color); max-height: 90vh; overflow-y: auto; }
-
-.drawer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); display: none; z-index: 9998; opacity: 0; transition: opacity 0.3s ease; }
-.drawer-overlay.active { display: block; opacity: 1; }
+.drawer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); display: none; z-index: 9998; }
+.drawer-overlay.active { display: block; }
 
 .side-drawer { position: fixed; top: 0; right: -100%; width: 100%; max-width: 440px; height: 100%; background: var(--container-bg); box-shadow: -5px 0 25px rgba(0,0,0,0.15); transition: right 0.3s ease; z-index: 9999; display: flex; flex-direction: column; padding: 20px; overflow-y: auto; }
 .side-drawer.open { right: 0; }
 
 .warning-banner { background: #fff3cd; color: #856404; border: 1px solid #ffeeba; padding: 10px; border-radius: 6px; font-size: 13px; margin-bottom: 12px; text-align: center; font-weight: bold; display: none; }
 
-.theme-font-section { display: flex; justify-content: space-between; margin-top: 15px; padding-top: 10px; border-top: 1px solid var(--border-color); }
+.theme-font-section { display: flex; justify-content: space-between; margin-top: 20px; padding-top: 10px; border-top: 1px solid var(--border-color); }
 .sub-btn-group { display: flex; flex-direction: column; gap: 4px; width: 48%; }
 .mini-btn-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; }
 .mini-btn-grid-three { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
@@ -160,6 +197,7 @@ button { padding: 10px; border: none; border-radius: 5px; font-weight: bold; cur
 .badge-deyn { background: rgba(220,53,69,0.15); color: #dc3545; }
 .badge-amaano { background: rgba(40,167,69,0.15); color: #28a745; }
 
+.view-section { display: block; }
 .hidden-section { display: none !important; }
 </style>
 </head>
@@ -169,9 +207,7 @@ button { padding: 10px; border: none; border-radius: 5px; font-weight: bold; cur
 <div id="appLockoutOverlay" class="overlay-card" style="display: none;">
   <div class="card-content">
     <h2 style="color: #dc3545; margin-bottom: 10px;">🔒 App Locked</h2>
-    <p style="font-size: 14px; margin-bottom: 15px; color: var(--text-color);">
-      Subscription expired. Please renew your plan.
-    </p>
+    <p style="font-size: 14px; margin-bottom: 15px;">Subscription expired. Please renew your plan.</p>
     <div style="background: rgba(0,123,255,0.1); padding: 12px; border-radius: 6px; margin-bottom: 15px;">
       <p style="font-size: 13px; font-weight: bold;">Contact for activation:</p>
       <p style="font-size: 18px; font-weight: bold; color: #007bff; margin-top: 5px;">📞 +252682501951</p>
@@ -183,59 +219,77 @@ button { padding: 10px; border: none; border-radius: 5px; font-weight: bold; cur
 
 <!-- PORTAL-KA MACMIILKA -->
 <div id="customerPortal" class="overlay-card" style="display:flex;">
-<div class="card-content">
-<h2>📱 Customer Portal</h2>
-<p style="font-size: 12px; color: #666; margin-bottom: 12px;">Enter your PIN to access account:</p>
+  <div class="card-content">
+    <h2>📱 Customer Portal</h2>
+    <p style="font-size: 12px; color: #666; margin-bottom: 12px;">Enter your PIN to access account:</p>
 
-<div id="custAuthForm">
-  <input type="password" id="custPinInput" placeholder="Enter PIN..." autocomplete="off">
-  <button onclick="accessCustomerFiles()" class="btn-success" style="width:100%; margin-top:10px;">LOGIN</button>
-</div>
+    <div id="custAuthForm">
+      <input type="password" id="custPinInput" placeholder="Enter PIN..." autocomplete="off">
+      <button onclick="accessCustomerFiles()" class="btn-success" style="width:100%; margin-top:10px;">LOGIN</button>
+    </div>
 
-<div id="custResultArea" style="margin-top:15px; display:none; text-align: left;">
-  <div style="background: rgba(0,123,255,0.05); padding: 12px; border-radius: 6px; border: 1px solid var(--accent-color); margin-bottom: 12px; text-align: center;">
-    <span id="portalAccountBadge" class="badge-tag badge-deyn">Deyn</span>
-    <h3 id="portalClientTitle" style="color: var(--accent-color); margin-top: 6px;">👤 Welcome</h3>
-    <div id="portalClientBal" style="font-size: 22px; font-weight: bold; color: #dc3545; margin-top: 4px;">Balance: $0.00</div>
+    <div id="custResultArea" style="margin-top:15px; display:none; text-align: left;">
+      <div style="background: rgba(0,123,255,0.05); padding: 12px; border-radius: 6px; border: 1px solid var(--accent-color); margin-bottom: 12px; text-align: center;">
+        <span id="portalAccountBadge" class="badge-tag badge-deyn">Deyn</span>
+        <h3 id="portalClientTitle" style="color: var(--accent-color); margin-top: 6px;">👤 Welcome</h3>
+        <div id="portalClientBal" style="font-size: 22px; font-weight: bold; color: #dc3545; margin-top: 4px;">Balance: $0.00</div>
+      </div>
+
+      <div style="margin-bottom:15px;">
+        <h4 style="color: var(--accent-color); font-size: 14px; margin-bottom: 6px;">📜 History:</h4>
+        <div id="portalClientHistory" style="max-height: 180px; overflow-y: auto; background: rgba(0,0,0,0.02); padding: 8px; border-radius: 5px; border: 1px solid var(--border-color);"></div>
+      </div>
+      <button onclick="resetPortalView()" class="btn-secondary" style="width:100%;">BACK</button>
+    </div>
+
+    <div style="margin-top:20px; border-top: 1px dashed var(--border-color); padding-top: 10px;">
+      <button onclick="showAdminLogin()" class="btn-secondary" style="font-size: 11px; padding: 6px 10px; background: transparent; color: #888;">🔑 Admin Login</button>
+    </div>
   </div>
-
-  <div style="margin-bottom:15px;">
-    <h4 style="color: var(--accent-color); font-size: 14px; margin-bottom: 6px;">📜 History:</h4>
-    <div id="portalClientHistory" style="max-height: 180px; overflow-y: auto; background: rgba(0,0,0,0.02); padding: 8px; border-radius: 5px; border: 1px solid var(--border-color);"></div>
-  </div>
-  <button onclick="resetPortalView()" class="btn-secondary" style="width:100%;">BACK</button>
-</div>
-
-<div style="margin-top:20px; border-top: 1px dashed var(--border-color); padding-top: 10px;">
-  <button onclick="showAdminLogin()" class="btn-secondary" style="font-size: 11px; padding: 6px 10px; background: transparent; color: #888;">🔑 Admin Login</button>
-</div>
-</div>
-</div>
-<!-- Dukaamada Dropdown Bar (Maamulka) -->
-<div id="adminStoreHeader" style="background: #1e293b; color: white; padding: 10px 15px; border-radius: 8px; margin: 15px 0; display: flex; justify-content: space-between; align-items: center;">
-  <div>
-    <label style="font-size: 13px; font-weight: bold; margin-right: 5px;">Dukaanka:</label>
-    <select id="storeSelect" onchange="changeStore(this.value)" style="padding: 5px 10px; border-radius: 5px; background: #0f172a; color: white; border: 1px solid #475569;">
-      <option value="main">Dukaanka Weyn</option>
-    </select>
-  </div>
-  <button onclick="openNewStoreModal()" style="background: #2563eb; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-size: 12px; font-weight: bold;">
-    + Dar Dukaan
-  </button>
 </div>
 
 <!-- ADMIN LOGIN MODAL -->
 <div id="dynamicLoginOverlay" class="overlay-card" style="display: none;">
-<div class="card-content">
-<p style="font-size: 15px; color: #007bff; font-weight: bold; margin-bottom: 15px;">Enter Admin Password</p>
-<input type="password" id="dynamicPasswordInput" placeholder="Password..." autocomplete="off">
-<p id="dynamicLoginError" style="display:none; margin-top:8px; font-size:12px; font-weight:bold; color:red;"></p>
-<button onclick="checkDynamicPassword()" style="width: 100%; margin-top: 12px;">LOGIN</button>
-<button onclick="hideAdminLogin()" class="btn-secondary" style="width:100%; margin-top:8px;">CANCEL</button>
-</div>
+  <div class="card-content">
+    <p style="font-size: 15px; color: #007bff; font-weight: bold; margin-bottom: 15px;">Enter Admin Password</p>
+    <input type="password" id="dynamicPasswordInput" placeholder="Password..." autocomplete="off">
+    <p id="dynamicLoginError" style="display:none; margin-top:8px; font-size:12px; font-weight:bold; color:red;"></p>
+    <button onclick="checkDynamicPassword()" style="width: 100%; margin-top: 12px;">LOGIN</button>
+    <button onclick="hideAdminLogin()" class="btn-secondary" style="width:100%; margin-top:8px;">CANCEL</button>
+  </div>
 </div>
 
-<!-- DRAWER OVERLAY & SIDE DRAWER -->
+<!-- INVOICE MODAL (GAAR AH OO NADIYEEKI LAI) -->
+<div id="invoiceModalOverlay" class="overlay-card" style="display: none;">
+  <div class="card-content">
+    <div style="display:flex; justify-style:space-between; align-items:center; margin-bottom: 15px;">
+      <h3 style="color: var(--accent-color);">🧾 Abuur Qaansheeg (Invoice)</h3>
+      <button onclick="closeInvoiceModal()" class="btn-danger" style="padding: 4px 10px; font-size: 12px;">✕</button>
+    </div>
+    
+    <div class="input-group">
+      <label style="font-weight: bold;">Dooro Macmiilka:</label>
+      <select id="invoiceCustomerSelect"></select>
+
+      <label style="font-weight: bold; margin-top: 5px;">Qaybta Xisaabta:</label>
+      <select id="invoiceTypeSelect">
+        <option value="debt">📝 Deyn (Koor kudalacag)</option>
+        <option value="amaano">💵 Ammaano (Kajar/Deduct)</option>
+      </select>
+
+      <h4 id="boonaHeaderTitle" style="margin-top: 10px; color: var(--accent-color);">📦 Item details:</h4>
+      <input type="text" id="invDesc" placeholder="Description (Sida: Bur 10 kartoon)...">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+        <input type="number" id="invQty" value="1" placeholder="Qty">
+        <input type="number" id="invPrice" value="0.00" placeholder="Price ($)">  
+      </div>
+      <button id="addBoonaBtn" onclick="addInvoiceItemStandalone()" class="btn-success" style="margin-top: 8px;">+ ADD TO INVOICE</button>
+    </div>
+    <button onclick="closeInvoiceModal()" class="btn-secondary" style="width: 100%; margin-top: 10px;">XIR QAANSHEEGTA</button>
+  </div>
+</div>
+
+<!-- SIDE DRAWER HISTORY -->
 <div id="drawerOverlay" class="drawer-overlay" onclick="closeDetailsModal()"></div>
 <div id="detailsDrawer" class="side-drawer">
   <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -243,21 +297,11 @@ button { padding: 10px; border: none; border-radius: 5px; font-weight: bold; cur
     <span id="modalTypeBadge" class="badge-tag badge-deyn">Deyn</span>
   </div>
   <div style="font-size:12px; color:#666; margin-bottom:10px;">Tel: <span id="modalClientPhone">—</span> | PIN: <span id="modalClientPin">1234</span></div>
-  <div id="modalClientBalance" style="font-size:28px; font-weight:bold; color:#dc3545; margin-bottom:10px;">$0.00</div>
+  <div id="modalClientBalance" style="font-size:28px; font-weight:bold; color:#dc3545; margin-bottom:15px;">$0.00</div>
 
-  <div class="invoice-box" style="border:1px dashed var(--border-color); padding:10px; margin-bottom:10px; background: rgba(0,0,0,0.01); border-radius: 6px;">
-    <h4 id="boonaHeaderTitle" style="margin-bottom: 10px; color: var(--accent-color);">📦 Invoice Item</h4>
-    <input type="text" id="invDesc" placeholder="Description...">
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 6px;">
-      <input type="number" id="invQty" value="1" placeholder="Qty">
-      <input type="number" id="invPrice" value="0.00" placeholder="Price ($)">
-    </div>
-    <button id="addBoonaBtn" onclick="addInvoiceItem()" class="btn-success" style="margin-top: 8px; width: 100%;">ADD ITEM</button>
-  </div>
-
-  <div id="modalHistoryArea" style="margin-top: 10px; max-height: 200px; overflow-y: auto; text-align: left;"></div>
-
-  <button onclick="closeDetailsModal()" class="btn-secondary" style="margin-top:15px; width:100%;">CLOSE</button>
+  <div id="modalHistoryArea" style="flex:1; overflow-y:auto; margin-bottom:15px;"></div>
+  
+  <button onclick="closeDetailsModal()" class="btn-secondary close-btn" style="width:100%;">CLOSE</button>
 </div>
 
 <!-- MAIN APP (ADMIN DASHBOARD) -->
@@ -267,72 +311,87 @@ button { padding: 10px; border: none; border-radius: 5px; font-weight: bold; cur
     ⚠️ Warning: Subscription renewal date is approaching (+252682501951).
   </div>
 
+  <!-- MAAMULKA DUKAAMADA -->
+  <div id="adminStoreHeader" style="background: #1e293b; color: white; padding: 10px 15px; border-radius: 8px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;">
+    <div>
+      <label style="font-size: 13px; font-weight: bold; margin-right: 5px;">Dukaanka:</label>
+      <select id="storeSelect" onchange="changeStore(this.value)" style="padding: 5px 10px; border-radius: 5px; background: #0f172a; color: white; border: 1px solid #475569; width: auto;">
+        <option value="Dukaanka Weyn">Dukaanka Weyn</option>
+      </select>
+    </div>
+    <button onclick="addNewStore()" class="btn-success" style="font-size: 12px; padding: 6px 12px;">+ Dar Dukaan</button>
+  </div>
+
   <!-- HEADER -->
   <div class="app-header">
     <div class="menu-dropdown">
       <button onclick="toggleMenu()" class="menu-btn">☰ MENU</button>
       <div id="myDropdown" class="dropdown-content">
-        <a href="#" onclick="switchView('debts')">📝 Debts</a>
-        <a href="#" onclick="switchView('amaanada')">💵 Deposit (Amaano)</a>
-        <a href="#" onclick="switchView('macaamiisha')">👥 Customers</a>
-        <a href="#" onclick="logoutAdmin()" style="color:#dc3545;">🔒 LOGOUT</a>
+        <a href="#" onclick="switchView('debts')">📝 Diiwaangeli Deyn</a>
+        <a href="#" onclick="switchView('amaanada')">💵 Diiwaangeli Ammaano</a>
+        <a href="#" onclick
+        ="switchView
+        Diiwaangeli
+      ('macaamiisha')">👤
+    Dhamaan Macaamiisha</a>
+        <a href="#" onclick
+        ="logoutAdmin()"
+        
+        
+         style="color:#dc3545;">🔒 LOGOUT</a>
       </div>
     </div>
-    <div id="merchantTitle" class="merchant-title-style">DebtWatcher</div>
+    <div id="merchantTitle" class="merchant-title-style">HantiMaamul</div>
   </div>
 
   <!-- SECTION 1: DEBTS -->
-  <div id="viewDebtsSection">
+  <div id="viewDebtsSection" class="view-section">
     <div class="section-badge-header">
-      <span>📝 Debt Register</span>
+      <span>📝 Diiwaanka Deynta</span>
       <span>Total: <span class="count-pill" id="countDebts">0</span></span>
     </div>
     
-    <div class="app-content-grid">
-      <div class="input-group">
-        <h4 style="color:var(--accent-color);">Macmiil cusub kudar</h4>
-        <input type="text" id="cName" placeholder="Customer Name">
-        <input type="number" id="cPhone" placeholder="Phone">
-        <input type="number" id="cPin" placeholder="PIN (Default: 1234)">
-        <button onclick="addC()" class="btn-success">ADD CUSTOMER</button>
-      </div>
+    <div class="input-group">
+      <h4 style="color:var(--accent-color);">Macmiil cusub kudar (Deyn)</h4>
+      <input type="text" id="cName" placeholder="Customer Name">
+      <input type="number" id="cPhone" placeholder="Phone">
+      <input type="number" id="cPin" placeholder="PIN (Default: 1234)">
+      <button onclick="addC()" class="btn-success">ADD CUSTOMER</button>
+    </div>
 
-      <div>
-        <input type="text" id="sBar" placeholder="Search debt customer..." oninput="render()" style="margin-bottom:8px;">
-        <div id="area" style="max-height: 350px; overflow-y: auto;"></div>
-        <div id="tGuud" class="total-box">Total Debt: $0.00</div>
-      </div>
+    <div>
+      <input type="text" id="sBar" placeholder="Search debt customer..." oninput="render()" style="margin-bottom:8px;">
+      <div id="area" style="max-height: 350px; overflow-y: auto;"></div>
+      <div id="tGuud" class="total-box">Total Debt: $0.00</div>
     </div>
   </div>
 
   <!-- SECTION 2: AMAANADA -->
   <div id="viewAmaanadaSection" class="hidden-section">
     <div class="section-badge-header" style="background: linear-gradient(135deg, #1e7e34, #28a745);">
-      <span>💵 Deposit Register</span>
+      <span>💵 Diiwaanka Ammaanada</span>
       <span>Total: <span class="count-pill" style="color: #1e7e34;" id="countAmaanada">0</span></span>
     </div>
 
-    <div class="app-content-grid">
-      <div class="input-group" style="border-left: 4px solid #28a745;">
-        <h4 style="color:#28a745;">Macmiil cusub kudar</h4>
-        <input type="text" id="amName" placeholder="Customer Name">
-        <input type="number" id="amPhone" placeholder="Phone">
-        <input type="number" id="amPin" placeholder="PIN (Default: 1234)">
-        <button onclick="addAmaanoClient()" class="btn-success" style="background:#28a745;">ADD DEPOSIT</button>
-      </div>
+    <div class="input-group" style="border-left: 4px solid #28a745;">
+      <h4 style="color:#28a745;">Macmiil cusub kudar (Ammaano)</h4>
+      <input type="text" id="amName" placeholder="Customer Name">
+      <input type="number" id="amPhone" placeholder="Phone">
+      <input type="number" id="amPin" placeholder="PIN (Default: 1234)">
+      <button onclick="addAmaanoClient()" class="btn-success" style="background:#28a745;">ADD DEPOSIT</button>
+    </div>
 
-      <div>
-        <input type="text" id="sBarAmaano" placeholder="Search deposit customer..." oninput="renderAmaanada()" style="margin-bottom:8px;">
-        <div id="amaanadaList" style="max-height: 350px; overflow-y: auto;"></div>
-        <div id="tAmaanoGuud" class="total-box" style="color:#28a745;">Total Deposit: $0.00</div>
-      </div>
+    <div>
+      <input type="text" id="sBarAmaano" placeholder="Search deposit customer..." oninput="renderAmaanada()" style="margin-bottom:8px;">
+      <div id="amaanadaList" style="max-height: 350px; overflow-y: auto;"></div>
+      <div id="tAmaanoGuud" class="total-box" style="color:#28a745;">Total Deposit: $0.00</div>
     </div>
   </div>
 
   <!-- SECTION 3: ALL CUSTOMERS GRID -->
   <div id="viewMacaamiishaSection" class="hidden-section">
     <div class="section-badge-header" style="background: linear-gradient(135deg, #d39e00, #ffc107); color: #000;">
-      <span>👥 All Customers</span>
+      <span>👥 Dhammaan Macaamiisha</span>
     </div>
     <input type="text" id="sBarMacaamiil" placeholder="Search customer..." oninput="renderMacaamiishaGrid()" style="margin-bottom:12px;">
     <div id="macaamiishaGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px;"></div>
@@ -425,6 +484,7 @@ function save() {
   render();
   renderAmaanada();
   renderMacaamiishaGrid();
+  populateInvoiceSelect();
 }
 
 function filterClients(list, query) {
@@ -454,6 +514,7 @@ function checkDynamicPassword() {
     render();
     renderAmaanada();
     renderMacaamiishaGrid();
+    populateInvoiceSelect();
   } else {
     document.getElementById("dynamicLoginError").innerText = "❌ Incorrect Password!";
     document.getElementById("dynamicLoginError").style.display = "block";
@@ -626,7 +687,7 @@ function render() {
       <div class="action-btn-row">
         <button class="btn-success" onclick="processTransaction(${originalIndex}, 'debt', 'kudalacag')">+ ADD DEBT</button>
         <button class="btn-warning" onclick="processTransaction(${originalIndex}, 'debt', 'bixi')">- PAY DEBT</button>
-        <button onclick="openDetailsModal(${originalIndex}, 'debt')">VIEW / INVOICE</button>
+        <button onclick="openDetailsModal(${originalIndex}, 'debt')">VIEW HISTORY</button>
         <button class="btn-danger" onclick="deleteCustomer(${originalIndex}, 'debt')">DELETE</button>
       </div>
     `;
@@ -664,7 +725,7 @@ function renderAmaanada() {
       <div class="action-btn-row">
         <button class="btn-success" style="background:#28a745;" onclick="processTransaction(${originalIndex}, 'amaano', 'kudalacag')">+ ADD DEPOSIT</button>
         <button class="btn-warning" onclick="processTransaction(${originalIndex}, 'amaano', 'bixi')">- WITHDRAW</button>
-        <button onclick="openDetailsModal(${originalIndex}, 'amaano')">VIEW / INVOICE</button>
+        <button onclick="openDetailsModal(${originalIndex}, 'amaano')">VIEW HISTORY</button>
         <button class="btn-danger" onclick="deleteCustomer(${originalIndex}, 'amaano')">DELETE</button>
       </div>
     `;
@@ -708,7 +769,7 @@ function renderMacaamiishaGrid() {
         </div>
       </div>
       <div style="display:flex; gap:4px; margin-top:10px;">
-        <button onclick="openDetailsModal(${c.origIndex}, '${c.category}')" style="flex:2; font-size:12px; padding:6px;">VIEW</button>
+        <button onclick="openDetailsModal(${c.origIndex}, '${c.category}')" style="flex:2; font-size:12px; padding:6px;">VIEW HISTORY</button>
         <button class="btn-danger" onclick="deleteCustomer(${c.origIndex}, '${c.category}')" style="flex:1; font-size:12px; padding:6px;">DELETE</button>
       </div>
     `;
@@ -725,17 +786,11 @@ function openDetailsModal(index, category) {
   if (!customer) return;
 
   let badge = document.getElementById("modalTypeBadge");
-  let boonaHeader = document.getElementById("boonaHeaderTitle");
-  let boonaBtn = document.getElementById("addBoonaBtn");
 
   if (category === 'debt') {
     badge.className = "badge-tag badge-deyn"; badge.innerText = "Deyn";
-    boonaHeader.innerText = "📦 Invoice Item (Add Debt)";
-    boonaBtn.innerText = "ADD TO DEBT"; boonaBtn.className = "btn-danger";
   } else {
     badge.className = "badge-tag badge-amaano"; badge.innerText = "Amaano";
-    boonaHeader.innerText = "📦 Invoice Item (Deduct Deposit)";
-    boonaBtn.innerText = "DEDUCT FROM DEPOSIT"; boonaBtn.className = "btn-success";
   }
 
   let bal = Number(customer.bal) || 0;
@@ -748,11 +803,11 @@ function openDetailsModal(index, category) {
   let histArea = document.getElementById("modalHistoryArea");
   histArea.innerHTML = "<h4>📜 History:</h4>";
   if (!customer.hist || customer.hist.length === 0) {
-    histArea.innerHTML += "<p style='font-size:12px; color:#888;'>No history.</p>";
+    histArea.innerHTML += "<p style='font-size:12px; color:#888; margin-top:10px;'>No history.</p>";
   } else {
     customer.hist.forEach(tx => {
       let sign = tx.type === 'kudalacag' ? '+' : '-';
-      histArea.innerHTML += `<div style="font-size:12px; border-bottom:1px solid #ddd; padding:5px 0;">
+      histArea.innerHTML += `<div style="font-size:12px; border-bottom:1px solid #ddd; padding:8px 0;">
         <b>${sign} $${Number(tx.amount).toFixed(2)}</b> - ${tx.note} <br><small style="color:#777;">${tx.date}</small>
       </div>`;
     });
@@ -767,22 +822,60 @@ function closeDetailsModal() {
   document.getElementById("detailsDrawer").classList.remove("open");
 }
 
-function addInvoiceItem() {
-  if (activeClientIndex === null) return;
+function populateInvoiceSelect() {
+  let select = document.getElementById("invoiceCustomerSelect");
+  if (!select) return;
+  select.innerHTML = "";
+
+  let combined = [];
+  (clients || []).forEach((c, idx) => combined.push({...c, category: 'debt', origIndex: idx}));
+  (amaanoClients || []).forEach((c, idx) => combined.push({...c, category: 'amaano', origIndex: idx}));
+
+  if (combined.length === 0) {
+    select.innerHTML = "<option value=''>Macmiil ma jiro</option>";
+    return;
+  }
+
+  combined.forEach(c => {
+    let opt = document.createElement("option");
+    opt.value = `${c.category}:${c.origIndex}`;
+    opt.text = `${c.name} (${c.category.toUpperCase()}) - $${Number(c.bal || 0).toFixed(2)}`;
+    select.appendChild(opt);
+  });
+}
+
+function openInvoiceModal() {
+  document.getElementById("myDropdown").classList.remove("show-dropdown");
+  populateInvoiceSelect();
+  document.getElementById("invoiceModalOverlay").style.display = "flex";
+}
+
+function closeInvoiceModal() {
+  document.getElementById("invoiceModalOverlay").style.display = "none";
+}
+
+function addInvoiceItemStandalone() {
+  let selectVal = document.getElementById("invoiceCustomerSelect").value;
+  if (!selectVal) { alert("Siri dooro macmiil!"); return; }
+
+  let [category, idxStr] = selectVal.split(":");
+  let targetIndex = parseInt(idxStr);
+  let selectedType = document.getElementById("invoiceTypeSelect").value;
+
   let desc = document.getElementById("invDesc").value.trim();
   let qty = parseFloat(document.getElementById("invQty").value) || 1;
   let price = parseFloat(document.getElementById("invPrice").value) || 0;
 
-  if (!desc || price <= 0) { alert("Fill item details!"); return; }
+  if (!desc || price <= 0) { alert("Fadlan geli xogta alaabta!"); return; }
 
   let totalAmount = qty * price;
-  let targetList = activeClientType === 'debt' ? clients : amaanoClients;
-  let customer = targetList[activeClientIndex];
+  let targetList = category === 'debt' ? clients : amaanoClients;
+  let customer = targetList[targetIndex];
   if (!customer) return;
 
   if (!customer.hist) customer.hist = [];
 
-  if (activeClientType === 'debt') {
+  if (selectedType === 'debt') {
     customer.bal = (Number(customer.bal) || 0) + totalAmount;
     customer.hist.unshift({
       type: 'kudalacag', amount: totalAmount,
@@ -802,8 +895,8 @@ function addInvoiceItem() {
   document.getElementById("invDesc").value = "";
   document.getElementById("invQty").value = "1";
   document.getElementById("invPrice").value = "0.00";
-  openDetailsModal(activeClientIndex, activeClientType);
-  alert("✅ Item added!");
+  alert("✅ Invoice-ka waa loo kaydiyay macmiilka!");
+  closeInvoiceModal();
 }
 
 function toggleMenu() { document.getElementById("myDropdown").classList.toggle("show-dropdown"); }
@@ -834,6 +927,20 @@ function changeFont(size, e) {
   }
   document.documentElement.style.setProperty('--main-font', size);
 }
+
+function addNewStore() {
+  let storeName = prompt("Geli magaca dukaanka cusub:");
+  if (storeName && storeName.trim() !== "") {
+    let select = document.getElementById("storeSelect");
+    let option = document.createElement("option");
+    option.value = storeName.trim();
+    option.text = storeName.trim();
+    select.appendChild(option);
+    select.value = storeName.trim();
+    changeStore(storeName.trim());
+  }
+}
+
 function changeStore(storeName) {
   loadStoreData(storeName);
   render();
@@ -841,6 +948,7 @@ function changeStore(storeName) {
   renderMacaamiishaGrid();
   populateInvoiceSelect();
   alert("🟢 Waxaa loo badalay: " + storeName);
-  }</script>
+}
+</script>
 </body>
 </html>
